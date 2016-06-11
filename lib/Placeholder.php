@@ -34,7 +34,7 @@ class Placeholder
      * @param string $plain
      * @param string $escape
      */
-    public function __construct($plain = '@', $escape = '%')
+    public function __construct($plain = '%', $escape = '@')
     {
         $this->plain = $plain;
         $this->escape = $escape;
