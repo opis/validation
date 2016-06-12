@@ -44,9 +44,14 @@ class Validator
      */
     public function __construct(ValidatorCollection $collection = null, Placeholder $placeholder = null)
     {
+        if ($collection === null) {
+            $collection = new DefaultCollection();
+        }
+
         if ($placeholder === null) {
             $placeholder = new Placeholder();
         }
+        
         $this->placeholder = $placeholder;
         $this->collection = $collection;
     }
