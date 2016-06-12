@@ -67,7 +67,7 @@ class FileMatch implements ValidatorInterface
             return false;
         }
 
-        return (bool) preg_match($arguments['pattern'], $value);
+        return (bool) preg_match($arguments['pattern'], $value['name']);
     }
 
 }
