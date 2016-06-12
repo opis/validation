@@ -60,8 +60,6 @@ class Validator
      * @param string $name
      * @param array $arguments
      *
-     * @throws \RuntimeException
-     *
      * @return $this
      */
     public function __call($name, $arguments)
