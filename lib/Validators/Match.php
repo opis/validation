@@ -48,8 +48,9 @@ class Match implements ValidatorInterface
      */
     public function getFormattedArgs(array $arguments)
     {
-        list($other) = $arguments;
+        list($value, $other) = $arguments;
         return array(
+            'value' => $value,
             'other' => $other,
         );
     }
@@ -63,7 +64,7 @@ class Match implements ValidatorInterface
      */
     public function validate($value, array $arguments)
     {
-        return $value == $arguments['other'];
+        return $value == $arguments['value'];
     }
 
 }
