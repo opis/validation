@@ -102,7 +102,7 @@ class Validator
             $item = array_shift($this->stack);
 
             if (false === $validator = $this->collection->get($item['name'])){
-                throw new \RuntimeException("Unknown validator " . $item['name']);
+                throw new \RuntimeException('Unknown validator `' . $item['name'] . '`');
             }
 
             $arguments = $validator->getFormattedArgs($item['arguments']);
@@ -116,10 +116,12 @@ class Validator
             }
 
             if (!isset($arguments['value'])) {
-                $arguments['value'] = $value;
+                $arguments['value'] = is_array($value) ? var_export($value, true) : $value;
             }
 
+            $this->stack = array();
             $this->errors[$key] = $this->placeholder->replace($validator->getError(), $arguments);
+
             break;
         }
 
