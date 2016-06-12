@@ -64,7 +64,7 @@ class Between implements ValidatorInterface
      */
     public function validate($value, array $arguments)
     {
-        return $value >= $arguments['min'] && $arguments['max'] <= $value;
+        return $value >= $arguments['min'] && $value <= $arguments['max'];
     }
 
 }
