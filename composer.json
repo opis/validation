@@ -20,5 +20,10 @@
         "psr-4": {
             "Opis\\Validation\\": "lib/"
         }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0.x-dev"
+        }
     }
 }
