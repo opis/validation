@@ -1,8 +1,10 @@
 <?php
 
+namespace Opis\Validation\Test;
+
 use Opis\Validation\Placeholder;
 
-class PlaceholderTest  extends PHPUnit_Framework_TestCase
+class PlaceholderTest  extends \PHPUnit_Framework_TestCase
 {
     /** @var  Placeholder */
     protected $ph;

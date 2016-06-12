@@ -1,9 +1,10 @@
 <?php
 
-use Opis\Validation\Validator;
+namespace Opis\Validation\Test;;
+
 use Opis\Validation\DefaultCollection;
 
-class ValidationTest extends PHPUnit_Framework_TestCase
+class ValidationTest extends \PHPUnit_Framework_TestCase
 {
     /** @var   Validator */
     protected $v;
