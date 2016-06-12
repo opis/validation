@@ -60,7 +60,11 @@ class RequiredFile implements ValidatorInterface
      */
     public function validate($value, array $arguments)
     {
-        return !(!is_array($value) || !isset($value['name']) || $value['name'] === null || trim($value['name']) === '');
+        if (!is_array($value) || !array_key_exists('name', $value)){
+            return false;
+        }
+
+        return !($value['name'] === null || trim($value['name']) === '');
     }
 
 }
