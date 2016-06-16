@@ -3,8 +3,9 @@
 namespace Opis\Validation\Test;;
 
 use Opis\Validation\DefaultCollection;
+use PHPUnit\Framework\TestCase;
 
-class ValidationTest extends \PHPUnit_Framework_TestCase
+class ValidationTest extends TestCase
 {
     /** @var   Validator */
     protected $v;
