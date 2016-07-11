@@ -31,9 +31,6 @@ class Validator
     /** @var array */
     protected $errors = array();
 
-    /** @var  null|array */
-    protected $userErrors;
-
     /** @var  Placeholder */
     protected $placeholder;
 
@@ -67,17 +64,22 @@ class Validator
         $this->stack[] = array(
             'name' => $name,
             'arguments' => $arguments,
+            'error' => null,
         );
         return $this;
     }
 
     /**
-     * @param array $errors
+     * @param string $error
      * @return $this
      */
-    public function setErrors(array $errors)
+    public function setError($error)
     {
-        $this->userErrors = $errors;
+        if(!empty($this->stack)){
+            $entry = array_pop($this->stack);
+            $entry['error'] = $error;
+            $this->stack[] = $entry;
+        }
         return $this;
     }
 
@@ -123,7 +125,8 @@ class Validator
             }
 
             $this->stack = array();
-            $this->errors[$key] = $this->placeholder->replace($validator->getError(), $arguments);
+            $error = isset($item['error']) ? $item['error'] : $validator->getError();
+            $this->errors[$key] = $this->placeholder->replace($error, $arguments);
 
             break;
         }
