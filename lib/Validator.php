@@ -71,9 +71,9 @@ class Validator
 
     /**
      * @param string $error
-     * @return $this
+     * @return Validator
      */
-    public function setError($error)
+    public function setError(string $error): self
     {
         if(!empty($this->stack)){
             $entry = array_pop($this->stack);
@@ -137,15 +137,15 @@ class Validator
     /**
      * @return bool
      */
-    public function hasErrors()
+    public function hasErrors(): bool
     {
         return !empty($this->errors);
     }
 
     /**
-     * @return array
+     * @return string[]
      */
-    public function getErrors()
+    public function getErrors(): array
     {
         return $this->errors;
     }
