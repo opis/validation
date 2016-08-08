@@ -34,7 +34,7 @@ class Placeholder
      * @param string $plain
      * @param string $escape
      */
-    public function __construct($plain = '%', $escape = '@')
+    public function __construct(string $plain = '%', string $escape = '@')
     {
         $this->plain = $plain;
         $this->escape = $escape;
@@ -46,7 +46,7 @@ class Placeholder
      *
      * @return string
      */
-    public function replace($text, array $placeholders = array())
+    public function replace(string $text, array $placeholders = array()): string
     {
         return strtr(strtr($text, $this->getPlainArgs($placeholders)), $this->getEscapedArgs($placeholders));
     }
@@ -55,7 +55,7 @@ class Placeholder
      * @param array $placeholders
      * @return array
      */
-    protected function getPlainArgs(array $placeholders)
+    protected function getPlainArgs(array $placeholders): array
     {
         $args = array();
         $plain = $this->plain;
@@ -71,7 +71,7 @@ class Placeholder
      * @param array $placeholders
      * @return array
      */
-    protected function getEscapedArgs(array $placeholders)
+    protected function getEscapedArgs(array $placeholders): array
     {
         $args = array();
         $escape = $this->escape;
