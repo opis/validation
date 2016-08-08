@@ -20,6 +20,7 @@
 
 namespace Opis\Validation\Validators;
 
+use Opis\String\UnicodeString as wstring;
 use Opis\Validation\ValidatorInterface;
 
 class Length implements ValidatorInterface
@@ -63,7 +64,7 @@ class Length implements ValidatorInterface
      */
     public function validate($value, array $arguments): bool
     {
-        return strlen($value) == $arguments['length'];
+        return wstring::from($value)->length() === $arguments['length'];
     }
 
 }
