@@ -41,10 +41,10 @@ use Opis\Validation\Validators\RequiredFile;
 class DefaultCollection extends ValidatorCollection
 {
     /**
-     * @param $name
+     * @param string $name
      * @return bool|ValidatorInterface
      */
-    public function get($name)
+    public function get(string $name)
     {
         if (false !== $validator = parent::get($name)) {
             return $validator;
@@ -55,10 +55,10 @@ class DefaultCollection extends ValidatorCollection
     }
 
     /**
-     * @param $name
+     * @param string $name
      * @return bool|ValidatorInterface
      */
-    protected function resolveValidator($name)
+    protected function resolveValidator(string $name)
     {
         switch ($name) {
             case 'required':

@@ -46,10 +46,10 @@ class ValidatorCollection
     }
 
     /**
-     * @param $name
+     * @param string $name
      * @return bool|ValidatorInterface
      */
-    public function get($name)
+    public function get(string $name)
     {
         return isset($this->validators[$name]) ? $this->validators[$name] : false;
     }
