@@ -29,7 +29,7 @@ class Match implements ValidatorInterface
      *
      * @return string
      */
-    public function name()
+    public function name(): string
     {
         return 'match';
     }
@@ -37,7 +37,7 @@ class Match implements ValidatorInterface
     /**
      * @return string
      */
-    public function getError()
+    public function getError(): string
     {
         return '@field must match @other';
     }
@@ -46,7 +46,7 @@ class Match implements ValidatorInterface
      * @param array $arguments
      * @return array
      */
-    public function getFormattedArgs(array $arguments)
+    public function getFormattedArgs(array $arguments): array
     {
         list($value, $other) = $arguments;
         return array(
@@ -62,7 +62,7 @@ class Match implements ValidatorInterface
      * @param array $arguments
      * @return bool
      */
-    public function validate($value, array $arguments)
+    public function validate($value, array $arguments): bool
     {
         return $value == $arguments['value'];
     }

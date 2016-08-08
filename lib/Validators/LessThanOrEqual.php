@@ -29,7 +29,7 @@ class LessThanOrEqual implements ValidatorInterface
      *
      * @return string
      */
-    public function name()
+    public function name(): string
     {
         return 'lte';
     }
@@ -37,7 +37,7 @@ class LessThanOrEqual implements ValidatorInterface
     /**
      * @return string
      */
-    public function getError()
+    public function getError(): string
     {
         return '@field must be at most @number';
     }
@@ -46,7 +46,7 @@ class LessThanOrEqual implements ValidatorInterface
      * @param array $arguments
      * @return array
      */
-    public function getFormattedArgs(array $arguments)
+    public function getFormattedArgs(array $arguments): array
     {
         list($number) = $arguments;
         return array(
@@ -61,7 +61,7 @@ class LessThanOrEqual implements ValidatorInterface
      * @param array $arguments
      * @return bool
      */
-    public function validate($value, array $arguments)
+    public function validate($value, array $arguments): bool
     {
         return $value <= $arguments['number'];
     }

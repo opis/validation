@@ -29,7 +29,7 @@ class Email implements ValidatorInterface
      *
      * @return string
      */
-    public function name()
+    public function name(): string
     {
         return 'email';
     }
@@ -37,7 +37,7 @@ class Email implements ValidatorInterface
     /**
      * @return string
      */
-    public function getError()
+    public function getError(): string
     {
         return '@field must be a valid email';
     }
@@ -46,7 +46,7 @@ class Email implements ValidatorInterface
      * @param array $arguments
      * @return array
      */
-    public function getFormattedArgs(array $arguments)
+    public function getFormattedArgs(array $arguments): array
     {
         return array();
     }
@@ -58,7 +58,7 @@ class Email implements ValidatorInterface
      * @param array $arguments
      * @return bool
      */
-    public function validate($value, array $arguments)
+    public function validate($value, array $arguments): bool
     {
         return filter_var($value, FILTER_VALIDATE_EMAIL);
     }

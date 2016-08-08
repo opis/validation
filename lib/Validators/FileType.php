@@ -29,7 +29,7 @@ class FileType implements ValidatorInterface
      *
      * @return string
      */
-    public function name()
+    public function name(): string
     {
         return 'fileType';
     }
@@ -37,7 +37,7 @@ class FileType implements ValidatorInterface
     /**
      * @return string
      */
-    public function getError()
+    public function getError(): string
     {
         return 'Invalid file type';
     }
@@ -46,7 +46,7 @@ class FileType implements ValidatorInterface
      * @param array $arguments
      * @return array
      */
-    public function getFormattedArgs(array $arguments)
+    public function getFormattedArgs(array $arguments): array
     {
         list($type) = $arguments;
         return array(
@@ -61,7 +61,7 @@ class FileType implements ValidatorInterface
      * @param array $arguments
      * @return bool
      */
-    public function validate($value, array $arguments)
+    public function validate($value, array $arguments): bool
     {
         return is_array($value) && isset($value['type']) && $value['type'] === $arguments['type'];
     }

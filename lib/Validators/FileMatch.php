@@ -29,7 +29,7 @@ class FileMatch implements ValidatorInterface
      *
      * @return string
      */
-    public function name()
+    public function name(): string
     {
         return 'fileMatch';
     }
@@ -37,7 +37,7 @@ class FileMatch implements ValidatorInterface
     /**
      * @return string
      */
-    public function getError()
+    public function getError(): string
     {
         return 'Invalid file type';
     }
@@ -46,7 +46,7 @@ class FileMatch implements ValidatorInterface
      * @param array $arguments
      * @return array
      */
-    public function getFormattedArgs(array $arguments)
+    public function getFormattedArgs(array $arguments): array
     {
         list($pattern) = $arguments;
         return array(
@@ -61,7 +61,7 @@ class FileMatch implements ValidatorInterface
      * @param array $arguments
      * @return bool
      */
-    public function validate($value, array $arguments)
+    public function validate($value, array $arguments): bool
     {
         if (!is_array($value) || !isset($value['name'])) {
             return false;

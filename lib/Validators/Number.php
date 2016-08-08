@@ -29,7 +29,7 @@ class Number implements ValidatorInterface
      *
      * @return string
      */
-    public function name()
+    public function name(): string
     {
         return 'number';
     }
@@ -37,7 +37,7 @@ class Number implements ValidatorInterface
     /**
      * @return string
      */
-    public function getError()
+    public function getError(): string
     {
         return '@field must be a number';
     }
@@ -46,7 +46,7 @@ class Number implements ValidatorInterface
      * @param array $arguments
      * @return array
      */
-    public function getFormattedArgs(array $arguments)
+    public function getFormattedArgs(array $arguments): array
     {
         return array();
     }
@@ -58,7 +58,7 @@ class Number implements ValidatorInterface
      * @param array $arguments
      * @return bool
      */
-    public function validate($value, array $arguments)
+    public function validate($value, array $arguments): bool
     {
         return is_numeric($value);
     }
