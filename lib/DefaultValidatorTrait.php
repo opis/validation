@@ -24,221 +24,210 @@ namespace Opis\Validation;
 trait DefaultValidatorTrait
 {
     /**
-     * @return $this
+     * @param array $validator
+     * @return self
      */
-    public function required()
+    abstract protected function push(array $validator): self;
+
+    /**
+     * @return self
+     */
+    public function required(): self
     {
-        $this->stack[] = array(
+        return $this->push([
             'name' => __FUNCTION__,
-            'arguments' => array(),
-        );
-        return $this;
+            'arguments' => [],
+        ]);
     }
 
     /**
      * @param int $value
-     * @return $this
+     * @return self
      */
-    public function length($value)
+    public function length(int $value): self
     {
-        $this->stack[] = array(
+        return $this->push([
             'name' => __FUNCTION__,
-            'arguments' => array($value),
-        );
-        return $this;
+            'arguments' => [$value],
+        ]);
     }
 
     /**
      * @param int $value
-     * @return $this
+     * @return self
      */
-    public function minLength($value)
+    public function minLength(int $value): self
     {
-        $this->stack[] = array(
+        return $this->push([
             'name' => __FUNCTION__,
-            'arguments' => array($value),
-        );
-        return $this;
+            'arguments' => [$value],
+        ]);
     }
 
     /**
      * @param int $value
-     * @return $this
+     * @return self
      */
-    public function maxLength($value)
+    public function maxLength(int $value): self
     {
-        $this->stack[] = array(
+        return $this->push([
             'name' => __FUNCTION__,
-            'arguments' => array($value),
-        );
-        return $this;
+            'arguments' => [$value],
+        ]);
     }
 
     /**
-     * @param int $value
-     * @return $this
+     * @param int|float $value
+     * @return self
      */
-    public function gt($value)
+    public function gt($value): self
     {
-        $this->stack[] = array(
+        return $this->push([
             'name' => __FUNCTION__,
-            'arguments' => array($value),
-        );
-        return $this;
+            'arguments' => [$value],
+        ]);
     }
 
     /**
-     * @param int $value
-     * @return $this
+     * @param int|float $value
+     * @return self
      */
-    public function lt($value)
+    public function lt($value): self
     {
-        $this->stack[] = array(
+        return $this->push([
             'name' => __FUNCTION__,
-            'arguments' => array($value),
-        );
-        return $this;
+            'arguments' => [$value],
+        ]);
     }
 
     /**
-     * @param int $value
-     * @return $this
+     * @param int|float $value
+     * @return self
      */
-    public function gte($value)
+    public function gte($value): self
     {
-        $this->stack[] = array(
+        return $this->push([
             'name' => __FUNCTION__,
-            'arguments' => array($value),
-        );
-        return $this;
+            'arguments' => [$value],
+        ]);
     }
 
     /**
-     * @param int $value
-     * @return $this
+     * @param int|float $value
+     * @return self
      */
-    public function lte($value)
+    public function lte($value): self
     {
-        $this->stack[] = array(
+        return $this->push([
             'name' => __FUNCTION__,
-            'arguments' => array($value),
-        );
-        return $this;
+            'arguments' => [$value],
+        ]);
     }
 
     /**
-     * @param int $value
-     * @return $this
+     * @param int|float $value
+     * @return self
      */
-    public function equal($value)
+    public function equal($value): self
     {
-        $this->stack[] = array(
+        return $this->push([
             'name' => __FUNCTION__,
-            'arguments' => array($value),
-        );
-        return $this;
+            'arguments' => [$value],
+        ]);
     }
 
     /**
-     * @param int $min
-     * @param int $max
-     * @return $this
+     * @param int|float $min
+     * @param int|float $max
+     * @return self
      */
-    public function between($min, $max)
+    public function between($min, $max): self
     {
-        $this->stack[] = array(
+        return $this->push([
             'name' => __FUNCTION__,
-            'arguments' => array($min, $max),
-        );
-        return $this;
+            'arguments' => [$min, $max],
+        ]);
     }
 
     /**
      * @param mixed $value
      * @param string $other
-     * @return $this
+     * @return self
      */
-    public function match($value, $other)
+    public function match($value, string $other): self
     {
-        $this->stack[] = array(
+        return $this->push([
             'name' => __FUNCTION__,
-            'arguments' => array($value, $other),
-        );
-        return $this;
+            'arguments' => [$value, $other],
+        ]);
     }
 
     /**
-     * @return $this
+     * @return self
      */
-    public function number()
+    public function number(): self
     {
-        $this->stack[] = array(
+        return $this->push([
             'name' => __FUNCTION__,
-            'arguments' => array(),
-        );
-        return $this;
+            'arguments' => [],
+        ]);
     }
 
     /**
-     * @return $this
+     * @return self
      */
-    public function email()
+    public function email(): self
     {
-        $this->stack[] = array(
+        return $this->push([
             'name' => __FUNCTION__,
-            'arguments' => array(),
-        );
-        return $this;
+            'arguments' => [],
+        ]);
     }
 
     /**
      * @param string $pattern
-     * @return $this
+     * @return self
      */
-    public function regex($pattern)
+    public function regex(string $pattern): self
     {
-        $this->stack[] = array(
+        return $this->push([
             'name' => __FUNCTION__,
-            'arguments' => array($pattern),
-        );
-        return $this;
+            'arguments' => [$pattern],
+        ]);
     }
 
     /**
-     * @return $this
+     * @return self
      */
-    public function requiredFile()
+    public function requiredFile(): self
     {
-        $this->stack[] = array(
+        return $this->push([
             'name' => __FUNCTION__,
-            'arguments' => array(),
-        );
-        return $this;
+            'arguments' => [],
+        ]);
     }
 
     /**
      * @param string $value
-     * @return $this
+     * @return self
      */
-    public function fileType($value)
+    public function fileType(string $value): self
     {
-        $this->stack[] = array(
+        return $this->push([
             'name' => __FUNCTION__,
-            'arguments' => array($value),
-        );
-        return $this;
+            'arguments' => [$value],
+        ]);
     }
 
     /**
      * @param string $pattern
-     * @return $this
+     * @return self
      */
-    public function fileMatch($pattern)
+    public function fileMatch(string $pattern): self
     {
-        $this->stack[] = array(
+        return $this->push([
             'name' => __FUNCTION__,
-            'arguments' => array($pattern),
-        );
-        return $this;
+            'arguments' => [$pattern],
+        ]);
     }
 }

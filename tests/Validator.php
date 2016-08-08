@@ -8,4 +8,15 @@ use Opis\Validation\DefaultValidatorTrait;
 class Validator extends BaseValidator
 {
     use DefaultValidatorTrait;
+
+    /**
+     * @param array $validator
+     * @return Validator
+     */
+    protected function push(array $validator): self
+    {
+        $this->stack[] = $validator;
+        return $this;
+    }
+
 }
