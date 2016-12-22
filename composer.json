@@ -19,7 +19,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Opis\\Validation\\": "lib/"
+            "Opis\\Validation\\": "src/"
         }
     },
     "autoload-dev": {
