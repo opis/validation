@@ -17,7 +17,6 @@
 
 namespace Opis\Validation\Test;;
 
-use Opis\Validation\DefaultCollection;
 use PHPUnit\Framework\TestCase;
 
 class ValidationTest extends TestCase
@@ -27,7 +26,7 @@ class ValidationTest extends TestCase
 
     public function setUp()
     {
-        $this->v = new Validator(new DefaultCollection());
+        $this->v = new Validator();
     }
 
     public function testReturnValue()
@@ -57,7 +56,6 @@ class ValidationTest extends TestCase
             ->validate('test', '');
         $this->assertEquals(true, $this->v->hasErrors());
     }
-
     public function testLengthValidator()
     {
         $this->v->length(6)
@@ -356,6 +354,4 @@ class ValidationTest extends TestCase
             ->validate('test', 'foo');
         $this->assertEquals(true, $this->v->hasErrors());
     }
-
-
 }

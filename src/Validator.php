@@ -1,6 +1,6 @@
 <?php
 /* ===========================================================================
- * Copyright 2013-2016 The Opis Project
+ * Copyright 2013-2018 The Opis Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,16 +17,18 @@
 
 namespace Opis\Validation;
 
+use RuntimeException;
+
 class Validator
 {
-    /** @var ValidatorCollection  */
+    /** @var ValidatorCollection */
     protected $collection;
 
     /** @var ValidatorInterface[] */
-    protected $stack = array();
+    protected $stack = [];
 
     /** @var array */
-    protected $errors = array();
+    protected $errors = [];
 
     /** @var  Placeholder */
     protected $placeholder;
@@ -45,7 +47,7 @@ class Validator
         if ($placeholder === null) {
             $placeholder = new Placeholder();
         }
-        
+
         $this->placeholder = $placeholder;
         $this->collection = $collection;
     }
@@ -58,11 +60,11 @@ class Validator
      */
     public function __call($name, $arguments)
     {
-        $this->stack[] = array(
+        $this->stack[] = [
             'name' => $name,
             'arguments' => $arguments,
             'error' => null,
-        );
+        ];
         return $this;
     }
 
@@ -72,7 +74,7 @@ class Validator
      */
     public function setError(string $error): self
     {
-        if(!empty($this->stack)){
+        if (!empty($this->stack)) {
             $entry = array_pop($this->stack);
             $entry['error'] = $error;
             $this->stack[] = $entry;
@@ -103,32 +105,52 @@ class Validator
         while (!empty($this->stack)) {
             $item = array_shift($this->stack);
 
-            if (false === $validator = $this->collection->get($item['name'])){
-                throw new \RuntimeException('Unknown validator `' . $item['name'] . '`');
+            if (null === $validator = $this->collection->get($item['name'])) {
+                throw new RuntimeException('Unknown validator `' . $item['name'] . '`');
             }
 
             $arguments = $validator->getFormattedArgs($item['arguments']);
 
-            if($validator->validate($value, $arguments)){
+            if ($validator->validate($value, $arguments)) {
                 continue;
             }
 
-            if (!isset($arguments['field'])) {
-                $arguments['field'] = $field;
-            }
-
-            if (!isset($arguments['value'])) {
-                $arguments['value'] = is_array($value) ? var_export($value, true) : $value;
-            }
-
-            $this->stack = array();
-            $error = isset($item['error']) ? $item['error'] : $validator->getError();
-            $this->errors[$key] = $this->placeholder->replace($error, $arguments);
+            $this->stack = [];
+            $this->errors[$key] = $this->formatError($field, $validator, $validator, $arguments,
+                $item['error'] ?? null);
 
             break;
         }
 
         return $value;
+    }
+
+    /**
+     * @param $field
+     * @param $value
+     * @param ValidatorInterface $validator
+     * @param array $arguments
+     * @param string|null $customError
+     * @return string
+     */
+    protected function formatError(
+        $field,
+        $value,
+        ValidatorInterface $validator,
+        array $arguments = [],
+        string $customError = null
+    ): string {
+        if (!isset($arguments['field'])) {
+            $arguments['field'] = (string) $field;
+        }
+
+        if (!array_key_exists('value', $arguments)) {
+            $arguments['value'] = !is_scalar($value) ? var_export($value, true) : $value;
+        }
+
+        $error = $customError ?? $validator->getError();
+
+        return $this->placeholder->replace($error, $arguments);
     }
 
     /**
@@ -146,5 +168,4 @@ class Validator
     {
         return $this->errors;
     }
-
 }

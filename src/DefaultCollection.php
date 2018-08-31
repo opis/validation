@@ -1,6 +1,6 @@
 <?php
 /* ===========================================================================
- * Copyright 2013-2016 The Opis Project
+ * Copyright 2013-2018 The Opis Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,33 +17,35 @@
 
 namespace Opis\Validation;
 
-use Opis\Validation\Validators\Between;
-use Opis\Validation\Validators\Email;
-use Opis\Validation\Validators\Equal;
-use Opis\Validation\Validators\FileMatch;
-use Opis\Validation\Validators\FileType;
-use Opis\Validation\Validators\GreaterThan;
-use Opis\Validation\Validators\GreaterThanOrEqual;
-use Opis\Validation\Validators\Length;
-use Opis\Validation\Validators\LessThan;
-use Opis\Validation\Validators\LessThanOrEqual;
-use Opis\Validation\Validators\Match;
-use Opis\Validation\Validators\MaxLength;
-use Opis\Validation\Validators\MinLength;
-use Opis\Validation\Validators\Number;
-use Opis\Validation\Validators\Regex;
-use Opis\Validation\Validators\Required;
-use Opis\Validation\Validators\RequiredFile;
+use Opis\Validation\Validators\{
+    Between,
+    Email,
+    Equal,
+    FileMatch,
+    FileType,
+    GreaterThan,
+    GreaterThanOrEqual,
+    Length,
+    LessThan,
+    LessThanOrEqual,
+    Match,
+    MaxLength,
+    MinLength,
+    Number,
+    Regex,
+    Required,
+    RequiredFile
+};
 
 class DefaultCollection extends ValidatorCollection
 {
     /**
      * @param string $name
-     * @return bool|ValidatorInterface
+     * @return ValidatorInterface|null
      */
     public function get(string $name)
     {
-        if (false !== $validator = parent::get($name)) {
+        if (null !== $validator = parent::get($name)) {
             return $validator;
         }
 
@@ -53,7 +55,7 @@ class DefaultCollection extends ValidatorCollection
 
     /**
      * @param string $name
-     * @return bool|ValidatorInterface
+     * @return ValidatorInterface|null
      */
     protected function resolveValidator(string $name)
     {
@@ -94,6 +96,6 @@ class DefaultCollection extends ValidatorCollection
                 return new FileMatch();
         }
 
-        return false;
+        return null;
     }
 }

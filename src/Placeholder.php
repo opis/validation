@@ -1,6 +1,6 @@
 <?php
 /* ===========================================================================
- * Copyright 2013-2016 The Opis Project
+ * Copyright 2013-2018 The Opis Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
  * ============================================================================ */
 
 namespace Opis\Validation;
-
 
 class Placeholder
 {
@@ -43,8 +42,11 @@ class Placeholder
      *
      * @return string
      */
-    public function replace(string $text, array $placeholders = array()): string
+    public function replace(string $text, array $placeholders = []): string
     {
+        if (!$placeholders) {
+            return $text;
+        }
         return strtr(strtr($text, $this->getPlainArgs($placeholders)), $this->getEscapedArgs($placeholders));
     }
 
@@ -54,7 +56,7 @@ class Placeholder
      */
     protected function getPlainArgs(array $placeholders): array
     {
-        $args = array();
+        $args = [];
         $plain = $this->plain;
 
         foreach ($placeholders as $key => $value) {
@@ -70,11 +72,11 @@ class Placeholder
      */
     protected function getEscapedArgs(array $placeholders): array
     {
-        $args = array();
+        $args = [];
         $escape = $this->escape;
 
         foreach ($placeholders as $key => $value) {
-            $args[$escape .  $key] = htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
+            $args[$escape .  $key] = is_string($value) ? htmlspecialchars($value, ENT_QUOTES, 'UTF-8') : $value;
         }
 
         return $args;

@@ -1,6 +1,6 @@
 <?php
 /* ===========================================================================
- * Copyright 2013-2016 The Opis Project
+ * Copyright 2013-2018 The Opis Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,17 +17,16 @@
 
 namespace Opis\Validation;
 
-
 class ValidatorCollection
 {
     /** @var ValidatorInterface[] */
-    protected $validators = array();
+    protected $validators = [];
 
     /**
      * ValidatorCollection constructor.
      * @param ValidatorInterface[] $validators
      */
-    public function __construct(array $validators = array())
+    public function __construct(array $validators = [])
     {
         foreach ($validators as $validator){
             $this->validators[$validator->name()] = $validator;
@@ -44,10 +43,10 @@ class ValidatorCollection
 
     /**
      * @param string $name
-     * @return bool|ValidatorInterface
+     * @return ValidatorInterface|null
      */
     public function get(string $name)
     {
-        return isset($this->validators[$name]) ? $this->validators[$name] : false;
+        return $this->validators[$name] ?? null;
     }
 }

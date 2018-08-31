@@ -1,6 +1,6 @@
 <?php
 /* ===========================================================================
- * Copyright 2013-2016 The Opis Project
+ * Copyright 2013-2018 The Opis Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,9 +22,7 @@ use Opis\Validation\ValidatorInterface;
 class FileMatch implements ValidatorInterface
 {
     /**
-     * Validator's name
-     *
-     * @return string
+     * @inheritdoc
      */
     public function name(): string
     {
@@ -32,7 +30,7 @@ class FileMatch implements ValidatorInterface
     }
 
     /**
-     * @return string
+     * @inheritdoc
      */
     public function getError(): string
     {
@@ -40,23 +38,17 @@ class FileMatch implements ValidatorInterface
     }
 
     /**
-     * @param array $arguments
-     * @return array
+     * @inheritdoc
      */
     public function getFormattedArgs(array $arguments): array
     {
-        list($pattern) = $arguments;
-        return array(
-            'pattern' => $pattern,
-        );
+        return [
+            'pattern' => reset($arguments),
+        ];
     }
 
     /**
-     * Validate
-     *
-     * @param mixed $value
-     * @param array $arguments
-     * @return bool
+     * @inheritdoc
      */
     public function validate($value, array $arguments): bool
     {
@@ -66,5 +58,4 @@ class FileMatch implements ValidatorInterface
 
         return (bool) preg_match($arguments['pattern'], $value['name']);
     }
-
 }
