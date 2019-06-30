@@ -15,18 +15,18 @@
  * limitations under the License.
  * ============================================================================ */
 
-namespace Opis\Validation\Validators\Field;
+namespace Opis\Validation\Rules;
 
-use Opis\Validation\IValidator;
+use Opis\Validation\IValidationRule;
 
-class Number implements IValidator
+class Equal implements IValidationRule
 {
     /**
      * @inheritdoc
      */
     public function name(): string
     {
-        return 'field:number';
+        return 'field:equal';
     }
 
     /**
@@ -34,7 +34,7 @@ class Number implements IValidator
      */
     public function getError(): string
     {
-        return '@field must be a number';
+        return '@field must be equal with @number';
     }
 
     /**
@@ -42,7 +42,17 @@ class Number implements IValidator
      */
     public function getFormattedArgs(array $arguments): array
     {
-        return [];
+        return [
+            'number' => reset($arguments),
+        ];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function prepareValue($value, array $arguments)
+    {
+        return $value;
     }
 
     /**
@@ -50,6 +60,6 @@ class Number implements IValidator
      */
     public function validate($value, array $arguments): bool
     {
-        return is_numeric($value);
+        return $value == $arguments['number'];
     }
 }

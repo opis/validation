@@ -15,10 +15,11 @@
  * limitations under the License.
  * ============================================================================ */
 
-namespace Opis\Validation\Data;
+namespace Opis\Validation\Types;
 
 use Opis\Http\Request;
-use Opis\Validation\RequestValidator;
+use Opis\Validation\Validator;
+use Opis\Validation\Result;
 use RuntimeException;
 
 abstract class Common
@@ -108,28 +109,40 @@ abstract class Common
     }
 
     /**
-     * @param RequestValidator $validator
-     * @param Request $request
+     * @param array $data
+     * @return mixed|null
+     */
+    protected function resolveValue(array $data)
+    {
+        return $data[$this->id] ?? null;
+    }
+
+    /**
+     * @param Validator $validator
+     * @param Result $result
+     * @param array $data
      * @return bool
      */
-    public function validate(RequestValidator $validator, Request $request): bool
+    public function validate(Validator $validator, Result $result, array $data): bool
     {
-        $value = $this->getValue($request);
+        $value = $this->resolveValue($data);
         $collection = $validator->getCollection();
         $formatter = $validator->getFormatter();
 
         foreach ($this->stack as $item) {
-            if (null === $dataValidator = $collection->get($item['name'])) {
+            if (null === $rule = $collection->get($item['name'])) {
                 throw new RuntimeException('Unknown validator "' . $item['name'] . '"');
             }
 
-            $arguments = $dataValidator->getFormattedArgs($item['arguments']);
+            $arguments = $rule->getFormattedArgs($item['arguments']);
+            $value = $rule->prepareValue($value, $arguments);
 
-            if ($dataValidator->validate($value, $arguments)) {
+            if ($rule->validate($value, $arguments)) {
+                $result->setValue($this->id, $value);
                 continue;
             }
 
-            $error = $item['error'] ?? $dataValidator->getError();
+            $error = $item['error'] ?? $rule->getError();
 
             if (!array_key_exists('value', $arguments)) {
                 $arguments['value'] = !is_scalar($value) ? var_export($value, true) : $value;
@@ -139,17 +152,11 @@ abstract class Common
                 $arguments[$this->type] = $this->name;
             }
 
-            $validator->setError($this->id, $formatter->format($error, $arguments));
+            $result->setError($this->id, $formatter->format($error, $arguments));
 
             return false;
         }
 
         return true;
     }
-
-    /**
-     * @param Request $request
-     * @return mixed
-     */
-    protected abstract function getValue(Request $request);
 }

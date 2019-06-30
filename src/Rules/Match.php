@@ -15,18 +15,18 @@
  * limitations under the License.
  * ============================================================================ */
 
-namespace Opis\Validation\Validators\Field;
+namespace Opis\Validation\Rules;
 
-use Opis\Validation\IValidator;
+use Opis\Validation\IValidationRule;
 
-class GreaterThan implements IValidator
+class Match implements IValidationRule
 {
     /**
      * @inheritdoc
      */
     public function name(): string
     {
-        return 'field:gt';
+        return 'field:match';
     }
 
     /**
@@ -34,7 +34,7 @@ class GreaterThan implements IValidator
      */
     public function getError(): string
     {
-        return '@field must be greater than @number';
+        return '@field is not valid';
     }
 
     /**
@@ -43,8 +43,16 @@ class GreaterThan implements IValidator
     public function getFormattedArgs(array $arguments): array
     {
         return [
-            'number' => reset($arguments),
+            'pattern' => reset($arguments),
         ];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function prepareValue($value, array $arguments)
+    {
+        return (string) $value;
     }
 
     /**
@@ -52,6 +60,6 @@ class GreaterThan implements IValidator
      */
     public function validate($value, array $arguments): bool
     {
-        return $value > $arguments['number'];
+        return (bool) preg_match($arguments['pattern'], $value);
     }
 }

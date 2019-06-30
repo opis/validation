@@ -15,18 +15,18 @@
  * limitations under the License.
  * ============================================================================ */
 
-namespace Opis\Validation\Validators\File;
+namespace Opis\Validation\Rules;
 
-use Opis\Validation\IValidator;
+use Opis\Validation\IValidationRule;
 
-class Match implements IValidator
+class LessThan implements IValidationRule
 {
     /**
      * @inheritdoc
      */
     public function name(): string
     {
-        return 'file:match';
+        return 'field:lt';
     }
 
     /**
@@ -34,7 +34,7 @@ class Match implements IValidator
      */
     public function getError(): string
     {
-        return 'Invalid file type';
+        return '@field must be less than @number';
     }
 
     /**
@@ -43,8 +43,16 @@ class Match implements IValidator
     public function getFormattedArgs(array $arguments): array
     {
         return [
-            'pattern' => reset($arguments),
+            'number' => reset($arguments),
         ];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function prepareValue($value, array $arguments)
+    {
+        return (int) $value;
     }
 
     /**
@@ -52,10 +60,6 @@ class Match implements IValidator
      */
     public function validate($value, array $arguments): bool
     {
-        if (!is_array($value) || !isset($value['name'])) {
-            return false;
-        }
-
-        return (bool) preg_match($arguments['pattern'], $value['name']);
+        return $value < $arguments['number'];
     }
 }

@@ -15,18 +15,19 @@
  * limitations under the License.
  * ============================================================================ */
 
-namespace Opis\Validation\Validators\Field;
+namespace Opis\Validation\Rules;
 
-use Opis\Validation\IValidator;
+use Opis\String\UnicodeString as wstring;
+use Opis\Validation\IValidationRule;
 
-class Email implements IValidator
+class MinLength implements IValidationRule
 {
     /**
      * @inheritdoc
      */
     public function name(): string
     {
-        return 'field:email';
+        return 'field:min_length';
     }
 
     /**
@@ -34,7 +35,7 @@ class Email implements IValidator
      */
     public function getError(): string
     {
-        return '@field must be a valid email';
+        return '@field must be at least @length character(s) long';
     }
 
     /**
@@ -42,7 +43,17 @@ class Email implements IValidator
      */
     public function getFormattedArgs(array $arguments): array
     {
-        return [];
+        return [
+            'length' => reset($arguments),
+        ];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function prepareValue($value, array $arguments)
+    {
+        return (string) $value;
     }
 
     /**
@@ -50,6 +61,6 @@ class Email implements IValidator
      */
     public function validate($value, array $arguments): bool
     {
-        return filter_var($value, FILTER_VALIDATE_EMAIL);
+        return wstring::from($value)->length() >= $arguments['length'];
     }
 }

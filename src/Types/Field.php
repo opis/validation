@@ -15,17 +15,22 @@
  * limitations under the License.
  * ============================================================================ */
 
-namespace Opis\Validation\Traits;
+namespace Opis\Validation\Types;
 
-trait FieldTrait
+use Opis\Http\Request;
+
+class Field extends Common
 {
-    abstract protected function push(array $data): self;
+    public function __construct(string $id, string $title)
+    {
+        parent::__construct($id, $title, 'field');
+    }
 
     /**
      * @param string $trim
-     * @return FieldTrait
+     * @return self
      */
-    public function required($trim = "\t\n\r\0\x0B"): self
+    public function required($trim = "\t\n\r\0\x0B"): Field
     {
         return $this->push([
             'name' => 'field:required',
@@ -147,10 +152,10 @@ trait FieldTrait
      * @param string $other
      * @return self
      */
-    public function match($value, string $other): self
+    public function sameAs($value, string $other): self
     {
         return $this->push([
-            'name' => 'field:match',
+            'name' => 'field:same_as',
             'arguments' => [$value, $other],
         ]);
     }
@@ -181,10 +186,10 @@ trait FieldTrait
      * @param string $pattern
      * @return self
      */
-    public function regex(string $pattern): self
+    public function match(string $pattern): self
     {
         return $this->push([
-            'name' => 'field:regex',
+            'name' => 'field:match',
             'arguments' => [$pattern],
         ]);
     }

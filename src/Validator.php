@@ -18,19 +18,13 @@
 namespace Opis\Validation;
 
 use Opis\Http\Request;
-use Opis\Validation\Data\Common;
-use Opis\Validation\Data\Field;
+use Opis\Validation\Types\Common;
+use Opis\Validation\Types\Field;
 
-class RequestValidator
+class Validator
 {
-    /** @var Collection */
+    /** @var RuleCollection */
     protected $collection;
-
-    /** @var IValidator[] */
-    protected $stack = [];
-
-    /** @var array */
-    protected $errors = [];
 
     /** @var  Formatter */
     protected $formatter;
@@ -40,20 +34,20 @@ class RequestValidator
 
     /**
      * Validator constructor.
-     * @param Collection|null $collection
-     * @param Formatter|null $placeholder
+     * @param RuleCollection|null $collection
+     * @param Formatter|null $formatter
      */
-    public function __construct(Collection $collection = null, Formatter $placeholder = null)
+    public function __construct(RuleCollection $collection = null, Formatter $formatter = null)
     {
         if ($collection === null) {
-            $collection = new Collection();
+            $collection = new RuleCollection();
         }
 
-        if ($placeholder === null) {
-            $placeholder = new Formatter();
+        if ($formatter === null) {
+            $formatter = new Formatter();
         }
 
-        $this->formatter = $placeholder;
+        $this->formatter = $formatter;
         $this->collection = $collection;
     }
 
@@ -66,38 +60,11 @@ class RequestValidator
     }
 
     /**
-     * @return Collection
+     * @return RuleCollection
      */
-    public function getCollection(): Collection
+    public function getCollection(): RuleCollection
     {
         return $this->collection;
-    }
-
-    /**
-     * @return bool
-     */
-    public function hasErrors(): bool
-    {
-        return !empty($this->errors);
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getErrors(): array
-    {
-        return $this->errors;
-    }
-
-    /**
-     * @param string $id
-     * @param string $error
-     * @return RequestValidator
-     */
-    public function setError(string $id, string $error): self
-    {
-        $this->errors[$id] = $error;
-        return $this;
     }
 
     /**
@@ -113,22 +80,25 @@ class RequestValidator
     }
 
     /**
-     * @param Request $request
-     * @return bool
+     * @param array|null $data
+     * @return Result
      */
-    public function validate(Request $request): bool
+    public function validate(array $data = null): Result
     {
-        $valid = true;
+        if ($data === null) {
+            $data = [];
+        }
+
+        $result = new Result();
 
         foreach ($this->validationData as $item) {
-            if (!$item->validate($this, $request)) {
-                $valid = false;
+            if (!$item->validate($this, $result, $data)) {
                 if ($item->validationStop()) {
                     break;
                 }
             }
         }
 
-        return $valid;
+        return $result;
     }
 }

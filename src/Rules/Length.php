@@ -15,18 +15,19 @@
  * limitations under the License.
  * ============================================================================ */
 
-namespace Opis\Validation\Validators\File;
+namespace Opis\Validation\Rules;
 
-use Opis\Validation\IValidator;
+use Opis\String\UnicodeString as wstring;
+use Opis\Validation\IValidationRule;
 
-class Type implements IValidator
+class Length implements IValidationRule
 {
     /**
      * @inheritdoc
      */
     public function name(): string
     {
-        return 'file:type';
+        return 'field:length';
     }
 
     /**
@@ -34,7 +35,7 @@ class Type implements IValidator
      */
     public function getError(): string
     {
-        return 'Invalid file type';
+        return '@field must have precisely @length character(s) long';
     }
 
     /**
@@ -43,8 +44,16 @@ class Type implements IValidator
     public function getFormattedArgs(array $arguments): array
     {
         return [
-            'type' => reset($arguments),
+            'length' => reset($arguments),
         ];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function prepareValue($value, array $arguments)
+    {
+        return (string) $value;
     }
 
     /**
@@ -52,6 +61,6 @@ class Type implements IValidator
      */
     public function validate($value, array $arguments): bool
     {
-        return is_array($value) && isset($value['type']) && $value['type'] === $arguments['type'];
+        return wstring::from($value)->length() === $arguments['length'];
     }
 }

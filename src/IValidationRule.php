@@ -15,45 +15,41 @@
  * limitations under the License.
  * ============================================================================ */
 
-namespace Opis\Validation\Validators\File;
+namespace Opis\Validation;
 
-use Opis\Validation\IValidator;
-
-class Required implements IValidator
+interface IValidationRule
 {
     /**
-     * @inheritdoc
+     * Validator's name
+     *
+     * @return string
      */
-    public function name(): string
-    {
-        return 'file:required';
-    }
+    public function name(): string;
 
     /**
-     * @inheritdoc
+     * @return string
      */
-    public function getError(): string
-    {
-        return '@file is required';
-    }
+    public function getError(): string;
 
     /**
-     * @inheritdoc
+     * @param array $arguments
+     * @return array
      */
-    public function getFormattedArgs(array $arguments): array
-    {
-        return [];
-    }
+    public function getFormattedArgs(array $arguments): array;
 
     /**
-     * @inheritdoc
+     * @param mixed $value
+     * @param array $arguments
+     * @return mixed
      */
-    public function validate($value, array $arguments): bool
-    {
-        if (!is_array($value) || !array_key_exists('name', $value)) {
-            return false;
-        }
+    public function prepareValue($value, array $arguments);
 
-        return !($value['name'] === null || trim($value['name']) === '');
-    }
+    /**
+     * Validate
+     *
+     * @param mixed $value
+     * @param array $arguments
+     * @return bool
+     */
+    public function validate($value, array $arguments): bool;
 }

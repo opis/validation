@@ -15,19 +15,18 @@
  * limitations under the License.
  * ============================================================================ */
 
-namespace Opis\Validation\Validators\Field;
+namespace Opis\Validation\Rules;
 
-use Opis\String\UnicodeString as wstring;
-use Opis\Validation\IValidator;
+use Opis\Validation\IValidationRule;
 
-class MinLength implements IValidator
+class GreaterThan implements IValidationRule
 {
     /**
      * @inheritdoc
      */
     public function name(): string
     {
-        return 'field:min_length';
+        return 'field:gt';
     }
 
     /**
@@ -35,7 +34,7 @@ class MinLength implements IValidator
      */
     public function getError(): string
     {
-        return '@field must be at least @length character(s) long';
+        return '@field must be greater than @number';
     }
 
     /**
@@ -44,8 +43,16 @@ class MinLength implements IValidator
     public function getFormattedArgs(array $arguments): array
     {
         return [
-            'length' => reset($arguments),
+            'number' => reset($arguments),
         ];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function prepareValue($value, array $arguments)
+    {
+        return (int) $value;
     }
 
     /**
@@ -53,6 +60,6 @@ class MinLength implements IValidator
      */
     public function validate($value, array $arguments): bool
     {
-        return wstring::from($value)->length() >= $arguments['length'];
+        return $value > $arguments['number'];
     }
 }

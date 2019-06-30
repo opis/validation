@@ -15,34 +15,51 @@
  * limitations under the License.
  * ============================================================================ */
 
-namespace Opis\Validation;
+namespace Opis\Validation\Rules;
 
-interface IValidator
+use Opis\Validation\IValidationRule;
+
+class GreaterThanOrEqual implements IValidationRule
 {
     /**
-     * Validator's name
-     *
-     * @return string
+     * @inheritdoc
      */
-    public function name(): string;
+    public function name(): string
+    {
+        return 'field:gte';
+    }
 
     /**
-     * @return string
+     * @inheritdoc
      */
-    public function getError(): string;
+    public function getError(): string
+    {
+        return '@field must be at least @number';
+    }
 
     /**
-     * @param array $arguments
-     * @return array
+     * @inheritdoc
      */
-    public function getFormattedArgs(array $arguments): array;
+    public function getFormattedArgs(array $arguments): array
+    {
+        return [
+            'number' => reset($arguments),
+        ];
+    }
 
     /**
-     * Validate
-     *
-     * @param mixed $value
-     * @param array $arguments
-     * @return bool
+     * @inheritDoc
      */
-    public function validate($value, array $arguments): bool;
+    public function prepareValue($value, array $arguments)
+    {
+        return (int) $value;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function validate($value, array $arguments): bool
+    {
+        return $value >= $arguments['number'];
+    }
 }

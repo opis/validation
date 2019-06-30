@@ -17,7 +17,7 @@
 
 namespace Opis\Validation;
 
-use Opis\Validation\Validators\Field\{
+use Opis\Validation\Rules\{
     Between,
     Email,
     Equal,
@@ -33,20 +33,15 @@ use Opis\Validation\Validators\Field\{
     Required,
     SameAs
 };
-use Opis\Validation\Validators\File\{
-    Match as FileMatch,
-    Type as FileType,
-    Required as FileRequired
-};
 
-class Collection
+class RuleCollection
 {
-    /** @var IValidator[] */
+    /** @var IValidationRule[] */
     protected $validators = [];
 
     /**
      * ValidatorCollection constructor.
-     * @param IValidator[] $validators
+     * @param IValidationRule[] $validators
      */
     public function __construct(array $validators = [])
     {
@@ -56,21 +51,21 @@ class Collection
     }
 
     /**
-     * @param IValidator $validator
+     * @param IValidationRule $rule
      */
-    public function add(IValidator $validator)
+    public function add(IValidationRule $rule)
     {
-        $this->validators[$validator->name()] = $validator;
+        $this->validators[$rule->name()] = $rule;
     }
 
     /**
      * @param string $name
-     * @return IValidator|null
+     * @return IValidationRule|null
      */
-    public function get(string $name): ?IValidator
+    public function get(string $name): ?IValidationRule
     {
         if (!isset($this->validators[$name])) {
-            return $this->validators[$name] = $this->resolveValidator($name);
+            return $this->validators[$name] = $this->resolveRule($name);
         }
 
         return $this->validators[$name] ?? null;
@@ -78,9 +73,9 @@ class Collection
 
     /**
      * @param string $name
-     * @return IValidator|null
+     * @return IValidationRule|null
      */
-    protected function resolveValidator(string $name): ?IValidator
+    protected function resolveRule(string $name): ?IValidationRule
     {
         switch ($name) {
             case 'field:required':
@@ -111,12 +106,6 @@ class Collection
                 return new Email();
             case 'field:match':
                 return new Match();
-            case 'file:required':
-                return new FileRequired();
-            case 'file:type':
-                return new FileType();
-            case 'file:match':
-                return new FileMatch();
         }
 
         return null;
