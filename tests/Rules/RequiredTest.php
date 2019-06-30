@@ -83,6 +83,21 @@ class RequiredTest extends TestCase
         $this->assertFalse($result->isValid());
     }
 
+    public function testRequiredFailUseOriginalValue()
+    {
+        $this->v
+            ->field('foo')
+            ->required('x')->setError('%value');
+
+        $data = [
+            'foo' => 'xxx',
+        ];
+
+        $result = $this->v->validate($data);
+        $this->assertFalse($result->isValid());
+        $this->assertEquals('xxx', $result->getError('foo'));
+    }
+
     public function testRequiredFailCustomName()
     {
         $this->v
