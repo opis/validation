@@ -100,7 +100,7 @@ class RuleCollection
                 return new Between();
             case 'field:same_as':
                 return new SameAs();
-            case 'field:number':
+            case 'field:is_numeric':
                 return new IsNumeric();
             case 'field:email':
                 return new Email();
