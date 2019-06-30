@@ -52,7 +52,11 @@ class GreaterThanOrEqual implements IValidationRule
      */
     public function prepareValue($value, array $arguments)
     {
-        return (int) $value;
+        if (!is_numeric($value)) {
+            return null;
+        }
+
+        return $value + 0;
     }
 
     /**
@@ -60,6 +64,10 @@ class GreaterThanOrEqual implements IValidationRule
      */
     public function validate($value, array $arguments): bool
     {
+        if ($value === null) {
+            return false;
+        }
+
         return $value >= $arguments['number'];
     }
 }

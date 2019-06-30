@@ -52,6 +52,10 @@ class Match implements IValidationRule
      */
     public function prepareValue($value, array $arguments)
     {
+        if (!is_scalar($value)) {
+            return null;
+        }
+
         return (string) $value;
     }
 
@@ -60,6 +64,10 @@ class Match implements IValidationRule
      */
     public function validate($value, array $arguments): bool
     {
+        if ($value === null) {
+            return false;
+        }
+
         return (bool) preg_match($arguments['pattern'], $value);
     }
 }

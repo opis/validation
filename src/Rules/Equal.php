@@ -34,7 +34,7 @@ class Equal implements IValidationRule
      */
     public function getError(): string
     {
-        return '@field must be equal with @number';
+        return '@field must be @scalar';
     }
 
     /**
@@ -43,7 +43,7 @@ class Equal implements IValidationRule
     public function getFormattedArgs(array $arguments): array
     {
         return [
-            'number' => reset($arguments),
+            'scalar' => reset($arguments),
         ];
     }
 
@@ -52,6 +52,10 @@ class Equal implements IValidationRule
      */
     public function prepareValue($value, array $arguments)
     {
+        if (!is_scalar($value)) {
+            return null;
+        }
+
         return $value;
     }
 
@@ -60,6 +64,10 @@ class Equal implements IValidationRule
      */
     public function validate($value, array $arguments): bool
     {
-        return $value == $arguments['number'];
+        if ($value === null) {
+            return false;
+        }
+
+        return $value == $arguments['scalar'];
     }
 }

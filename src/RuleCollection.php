@@ -29,7 +29,7 @@ use Opis\Validation\Rules\{
     Match,
     MaxLength,
     MinLength,
-    Number,
+    IsNumeric,
     Required,
     SameAs
 };
@@ -101,7 +101,7 @@ class RuleCollection
             case 'field:same_as':
                 return new SameAs();
             case 'field:number':
-                return new Number();
+                return new IsNumeric();
             case 'field:email':
                 return new Email();
             case 'field:match':

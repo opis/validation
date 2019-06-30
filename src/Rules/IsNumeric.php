@@ -19,14 +19,14 @@ namespace Opis\Validation\Rules;
 
 use Opis\Validation\IValidationRule;
 
-class Number implements IValidationRule
+class IsNumeric implements IValidationRule
 {
     /**
      * @inheritdoc
      */
     public function name(): string
     {
-        return 'field:number';
+        return 'field:is_numeric';
     }
 
     /**

@@ -52,6 +52,10 @@ class Required implements IValidationRule
      */
     public function prepareValue($value, array $arguments)
     {
+        if (!is_scalar($value)) {
+            return null;
+        }
+
         $value = (string) $value;
         return trim($value, $arguments['trim']);
     }

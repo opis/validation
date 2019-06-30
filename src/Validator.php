@@ -17,9 +17,7 @@
 
 namespace Opis\Validation;
 
-use Opis\Http\Request;
-use Opis\Validation\Types\Common;
-use Opis\Validation\Types\Field;
+use Opis\Validation\Types\{Common, Field};
 
 class Validator
 {

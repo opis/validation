@@ -53,6 +53,10 @@ class MaxLength implements IValidationRule
      */
     public function prepareValue($value, array $arguments)
     {
+        if (!is_scalar($value)) {
+            return null;
+        }
+
         return (string) $value;
     }
 
@@ -61,6 +65,10 @@ class MaxLength implements IValidationRule
      */
     public function validate($value, array $arguments): bool
     {
+        if ($value === null) {
+            return false;
+        }
+
         return wstring::from($value)->length() <= $arguments['length'];
     }
 }

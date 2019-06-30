@@ -17,7 +17,7 @@
 
 namespace Opis\Validation\Rules;
 
-use Opis\Validation\IValidationRule;
+use Opis\Validation\{IValidationRule, Result};
 
 class SameAs implements IValidationRule
 {
@@ -42,13 +42,18 @@ class SameAs implements IValidationRule
      */
     public function getFormattedArgs(array $arguments): array
     {
-        list($value, $other) = $arguments;
+        list($id, $name) = $arguments;
+
+        if ($name === null) {
+            $name = $id;
+        }
 
         return [
-            'value' => $value,
-            'other' => $other,
+            'id' => $id,
+            'other' => $name
         ];
     }
+
     /**
      * @inheritDoc
      */
@@ -62,6 +67,9 @@ class SameAs implements IValidationRule
      */
     public function validate($value, array $arguments): bool
     {
-        return $value == $arguments['value'];
+        /** @var Result $result */
+        $result = $arguments['$result'];
+
+        return $value === $result->getValue($arguments['id']);
     }
 }

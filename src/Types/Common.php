@@ -135,6 +135,7 @@ abstract class Common
             }
 
             $arguments = $rule->getFormattedArgs($item['arguments']);
+            $arguments['$result'] = $result;
             $value = $rule->prepareValue($value, $arguments);
 
             if ($rule->validate($value, $arguments)) {

@@ -17,8 +17,6 @@
 
 namespace Opis\Validation\Types;
 
-use Opis\Http\Request;
-
 class Field extends Common
 {
     public function __construct(string $id, string $title)
@@ -148,25 +146,25 @@ class Field extends Common
     }
 
     /**
-     * @param mixed $value
-     * @param string $other
+     * @param string $id
+     * @param string|null $name
      * @return self
      */
-    public function sameAs($value, string $other): self
+    public function sameAs(string $id, string $name = null): self
     {
         return $this->push([
             'name' => 'field:same_as',
-            'arguments' => [$value, $other],
+            'arguments' => [$id, $name],
         ]);
     }
 
     /**
      * @return self
      */
-    public function number(): self
+    public function isNumeric(): self
     {
         return $this->push([
-            'name' => 'field:number',
+            'name' => 'field:is_numeric',
             'arguments' => [],
         ]);
     }

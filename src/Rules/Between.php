@@ -43,6 +43,7 @@ class Between implements IValidationRule
     public function getFormattedArgs(array $arguments): array
     {
         list($min, $max) = $arguments;
+        
         return [
             'min' => $min,
             'max' => $max,
@@ -54,7 +55,11 @@ class Between implements IValidationRule
      */
     public function prepareValue($value, array $arguments)
     {
-        return (int) $value;
+        if (!is_numeric($value)) {
+            return null;
+        }
+
+        return $value + 0;
     }
 
     /**
@@ -62,6 +67,10 @@ class Between implements IValidationRule
      */
     public function validate($value, array $arguments): bool
     {
+        if ($value === null) {
+            return false;
+        }
+
         return $value >= $arguments['min'] && $value <= $arguments['max'];
     }
 }
