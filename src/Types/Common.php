@@ -125,7 +125,7 @@ abstract class Common
      */
     public function validate(Validator $validator, Result $result, array $data): bool
     {
-        $value = $this->resolveValue($data);
+        $value = $originalValue = $this->resolveValue($data);
         $collection = $validator->getCollection();
         $formatter = $validator->getFormatter();
 
@@ -145,7 +145,7 @@ abstract class Common
             $error = $item['error'] ?? $rule->getError();
 
             if (!array_key_exists('value', $arguments)) {
-                $arguments['value'] = !is_scalar($value) ? var_export($value, true) : $value;
+                $arguments['value'] = !is_scalar($originalValue) ? var_export($originalValue, true) : $originalValue;
             }
 
             if (!array_key_exists($this->type, $arguments)) {
