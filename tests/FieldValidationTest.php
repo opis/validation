@@ -1,6 +1,6 @@
 <?php
 /* ===========================================================================
- * Copyright 2018 Zindex Software
+ * Copyright 2019 Zindex Software
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,34 +15,18 @@
  * limitations under the License.
  * ============================================================================ */
 
-namespace Opis\Validation;
+namespace Opis\Validation\Test;
 
-interface ValidatorInterface
+
+class FieldValidationTest extends Base
 {
-    /**
-     * Validator's name
-     *
-     * @return string
-     */
-    public function name(): string;
+    public function testRequired()
+    {
+        $this->v
+            ->field('foo')
+            ->required();
 
-    /**
-     * @return string
-     */
-    public function getError(): string;
-
-    /**
-     * @param array $arguments
-     * @return array
-     */
-    public function getFormattedArgs(array $arguments): array;
-
-    /**
-     * Validate
-     *
-     * @param mixed $value
-     * @param array $arguments
-     * @return bool
-     */
-    public function validate($value, array $arguments): bool;
+        $data = [];
+        $this->assertTrue($this->v->validate($this->request($data)));
+    }
 }

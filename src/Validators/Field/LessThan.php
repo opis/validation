@@ -15,18 +15,18 @@
  * limitations under the License.
  * ============================================================================ */
 
-namespace Opis\Validation\Validators;
+namespace Opis\Validation\Validators\Field;
 
-use Opis\Validation\ValidatorInterface;
+use Opis\Validation\IValidator;
 
-class FileType implements ValidatorInterface
+class LessThan implements IValidator
 {
     /**
      * @inheritdoc
      */
     public function name(): string
     {
-        return 'fileType';
+        return 'field:lt';
     }
 
     /**
@@ -34,7 +34,7 @@ class FileType implements ValidatorInterface
      */
     public function getError(): string
     {
-        return 'Invalid file type';
+        return '@field must be less than @number';
     }
 
     /**
@@ -43,7 +43,7 @@ class FileType implements ValidatorInterface
     public function getFormattedArgs(array $arguments): array
     {
         return [
-            'type' => reset($arguments),
+            'number' => reset($arguments),
         ];
     }
 
@@ -52,6 +52,6 @@ class FileType implements ValidatorInterface
      */
     public function validate($value, array $arguments): bool
     {
-        return is_array($value) && isset($value['type']) && $value['type'] === $arguments['type'];
+        return $value < $arguments['number'];
     }
 }

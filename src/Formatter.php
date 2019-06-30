@@ -17,7 +17,7 @@
 
 namespace Opis\Validation;
 
-class Placeholder
+class Formatter
 {
     /** @var  string */
     protected $escape;
@@ -42,7 +42,7 @@ class Placeholder
      *
      * @return string
      */
-    public function replace(string $text, array $placeholders = []): string
+    public function format(string $text, array $placeholders = []): string
     {
         if (!$placeholders) {
             return $text;

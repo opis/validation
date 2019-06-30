@@ -15,18 +15,19 @@
  * limitations under the License.
  * ============================================================================ */
 
-namespace Opis\Validation\Validators;
+namespace Opis\Validation\Validators\Field;
 
-use Opis\Validation\ValidatorInterface;
+use Opis\String\UnicodeString as wstring;
+use Opis\Validation\IValidator;
 
-class LessThan implements ValidatorInterface
+class MaxLength implements IValidator
 {
     /**
      * @inheritdoc
      */
     public function name(): string
     {
-        return 'lt';
+        return 'field:min_length';
     }
 
     /**
@@ -34,7 +35,7 @@ class LessThan implements ValidatorInterface
      */
     public function getError(): string
     {
-        return '@field must be less than @number';
+        return '@field must be at most @length character(s) long';
     }
 
     /**
@@ -43,7 +44,7 @@ class LessThan implements ValidatorInterface
     public function getFormattedArgs(array $arguments): array
     {
         return [
-            'number' => reset($arguments),
+            'length' => reset($arguments),
         ];
     }
 
@@ -52,6 +53,6 @@ class LessThan implements ValidatorInterface
      */
     public function validate($value, array $arguments): bool
     {
-        return $value < $arguments['number'];
+        return wstring::from($value)->length() <= $arguments['length'];
     }
 }

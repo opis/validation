@@ -1,6 +1,6 @@
 <?php
 /* ===========================================================================
- * Copyright 2018 Zindex Software
+ * Copyright 2019 Zindex Software
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,24 +15,21 @@
  * limitations under the License.
  * ============================================================================ */
 
-namespace Opis\Validation;
+namespace Opis\Validation\Traits;
 
-trait DefaultValidatorTrait
+trait FieldTrait
 {
-    /**
-     * @param array $validator
-     * @return self
-     */
-    abstract protected function push(array $validator): self;
+    abstract protected function push(array $data): self;
 
     /**
-     * @return self
+     * @param string $trim
+     * @return FieldTrait
      */
-    public function required(): self
+    public function required($trim = "\t\n\r\0\x0B"): self
     {
         return $this->push([
-            'name' => __FUNCTION__,
-            'arguments' => [],
+            'name' => 'field:required',
+            'arguments' => [$trim],
         ]);
     }
 
@@ -43,7 +40,7 @@ trait DefaultValidatorTrait
     public function length(int $value): self
     {
         return $this->push([
-            'name' => __FUNCTION__,
+            'name' => 'field:length',
             'arguments' => [$value],
         ]);
     }
@@ -55,7 +52,7 @@ trait DefaultValidatorTrait
     public function minLength(int $value): self
     {
         return $this->push([
-            'name' => __FUNCTION__,
+            'name' => 'field:min_length',
             'arguments' => [$value],
         ]);
     }
@@ -67,7 +64,7 @@ trait DefaultValidatorTrait
     public function maxLength(int $value): self
     {
         return $this->push([
-            'name' => __FUNCTION__,
+            'name' => 'field:max_length',
             'arguments' => [$value],
         ]);
     }
@@ -79,7 +76,7 @@ trait DefaultValidatorTrait
     public function gt($value): self
     {
         return $this->push([
-            'name' => __FUNCTION__,
+            'name' => 'field:gt',
             'arguments' => [$value],
         ]);
     }
@@ -91,7 +88,7 @@ trait DefaultValidatorTrait
     public function lt($value): self
     {
         return $this->push([
-            'name' => __FUNCTION__,
+            'name' => 'field:lt',
             'arguments' => [$value],
         ]);
     }
@@ -103,7 +100,7 @@ trait DefaultValidatorTrait
     public function gte($value): self
     {
         return $this->push([
-            'name' => __FUNCTION__,
+            'name' => 'field:gte',
             'arguments' => [$value],
         ]);
     }
@@ -115,7 +112,7 @@ trait DefaultValidatorTrait
     public function lte($value): self
     {
         return $this->push([
-            'name' => __FUNCTION__,
+            'name' => 'field:lte',
             'arguments' => [$value],
         ]);
     }
@@ -127,7 +124,7 @@ trait DefaultValidatorTrait
     public function equal($value): self
     {
         return $this->push([
-            'name' => __FUNCTION__,
+            'name' => 'field:equal',
             'arguments' => [$value],
         ]);
     }
@@ -140,7 +137,7 @@ trait DefaultValidatorTrait
     public function between($min, $max): self
     {
         return $this->push([
-            'name' => __FUNCTION__,
+            'name' => 'field:between',
             'arguments' => [$min, $max],
         ]);
     }
@@ -153,7 +150,7 @@ trait DefaultValidatorTrait
     public function match($value, string $other): self
     {
         return $this->push([
-            'name' => __FUNCTION__,
+            'name' => 'field:match',
             'arguments' => [$value, $other],
         ]);
     }
@@ -164,7 +161,7 @@ trait DefaultValidatorTrait
     public function number(): self
     {
         return $this->push([
-            'name' => __FUNCTION__,
+            'name' => 'field:number',
             'arguments' => [],
         ]);
     }
@@ -175,7 +172,7 @@ trait DefaultValidatorTrait
     public function email(): self
     {
         return $this->push([
-            'name' => __FUNCTION__,
+            'name' => 'field:email',
             'arguments' => [],
         ]);
     }
@@ -187,42 +184,7 @@ trait DefaultValidatorTrait
     public function regex(string $pattern): self
     {
         return $this->push([
-            'name' => __FUNCTION__,
-            'arguments' => [$pattern],
-        ]);
-    }
-
-    /**
-     * @return self
-     */
-    public function requiredFile(): self
-    {
-        return $this->push([
-            'name' => __FUNCTION__,
-            'arguments' => [],
-        ]);
-    }
-
-    /**
-     * @param string $value
-     * @return self
-     */
-    public function fileType(string $value): self
-    {
-        return $this->push([
-            'name' => __FUNCTION__,
-            'arguments' => [$value],
-        ]);
-    }
-
-    /**
-     * @param string $pattern
-     * @return self
-     */
-    public function fileMatch(string $pattern): self
-    {
-        return $this->push([
-            'name' => __FUNCTION__,
+            'name' => 'field:regex',
             'arguments' => [$pattern],
         ]);
     }

@@ -17,56 +17,56 @@
 
 namespace Opis\Validation\Test;
 
-use Opis\Validation\Placeholder;
+use Opis\Validation\Formatter;
 use PHPUnit\Framework\TestCase;
 
-class PlaceholderTest extends TestCase
+class FormatterTest extends TestCase
 {
-    /** @var  Placeholder */
-    protected $ph;
+    /** @var  Formatter */
+    protected $f;
 
     public function setUp()
     {
-        $this->ph = new Placeholder();
+        $this->f = new Formatter();
     }
 
     public function testReplace()
     {
-        $this->assertEquals('bar bar', $this->ph->replace('@foo bar', ['foo' => 'bar']));
+        $this->assertEquals('bar bar', $this->f->format('@foo bar', ['foo' => 'bar']));
     }
 
     public function testEscapedReplace()
     {
-        $this->assertEquals('&lt;bar&gt; bar', $this->ph->replace('@foo bar', ['foo' => '<bar>']));
+        $this->assertEquals('&lt;bar&gt; bar', $this->f->format('@foo bar', ['foo' => '<bar>']));
     }
 
     public function testUnescapedReplace()
     {
-        $this->assertEquals('<bar> bar', $this->ph->replace('%foo bar', ['foo' => '<bar>']));
+        $this->assertEquals('<bar> bar', $this->f->format('%foo bar', ['foo' => '<bar>']));
     }
 
     public function testBoth()
     {
-        $this->assertEquals('&lt;bar&gt; <foo>', $this->ph->replace('@foo %bar', ['foo' => '<bar>', 'bar' => '<foo>']));
+        $this->assertEquals('&lt;bar&gt; <foo>', $this->f->format('@foo %bar', ['foo' => '<bar>', 'bar' => '<foo>']));
     }
 
     public function testUnknownEscaped()
     {
-        $this->assertEquals('@foo bar', $this->ph->replace('@foo bar'));
+        $this->assertEquals('@foo bar', $this->f->format('@foo bar'));
     }
 
     public function testUnknownUnescaped()
     {
-        $this->assertEquals('%foo bar', $this->ph->replace('%foo bar'));
+        $this->assertEquals('%foo bar', $this->f->format('%foo bar'));
     }
 
     public function testUnknownBoth()
     {
-        $this->assertEquals('@foo %bar', $this->ph->replace('@foo %bar'));
+        $this->assertEquals('@foo %bar', $this->f->format('@foo %bar'));
     }
 
     public function testReplaceReplaced()
     {
-        $this->assertEquals('foo qux', $this->ph->replace('foo %bar', ['bar' => '@foo', 'foo' => 'qux']));
+        $this->assertEquals('foo qux', $this->f->format('foo %bar', ['bar' => '@foo', 'foo' => 'qux']));
     }
 }

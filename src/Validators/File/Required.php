@@ -15,18 +15,18 @@
  * limitations under the License.
  * ============================================================================ */
 
-namespace Opis\Validation\Validators;
+namespace Opis\Validation\Validators\File;
 
-use Opis\Validation\ValidatorInterface;
+use Opis\Validation\IValidator;
 
-class Number implements ValidatorInterface
+class Required implements IValidator
 {
     /**
      * @inheritdoc
      */
     public function name(): string
     {
-        return 'number';
+        return 'file:required';
     }
 
     /**
@@ -34,7 +34,7 @@ class Number implements ValidatorInterface
      */
     public function getError(): string
     {
-        return '@field must be a number';
+        return '@file is required';
     }
 
     /**
@@ -50,6 +50,10 @@ class Number implements ValidatorInterface
      */
     public function validate($value, array $arguments): bool
     {
-        return is_numeric($value);
+        if (!is_array($value) || !array_key_exists('name', $value)) {
+            return false;
+        }
+
+        return !($value['name'] === null || trim($value['name']) === '');
     }
 }

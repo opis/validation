@@ -15,19 +15,18 @@
  * limitations under the License.
  * ============================================================================ */
 
-namespace Opis\Validation\Validators;
+namespace Opis\Validation\Validators\Field;
 
-use Opis\String\UnicodeString as wstring;
-use Opis\Validation\ValidatorInterface;
+use Opis\Validation\IValidator;
 
-class MaxLength implements ValidatorInterface
+class Required implements IValidator
 {
     /**
      * @inheritdoc
      */
     public function name(): string
     {
-        return 'minLength';
+        return 'field:required';
     }
 
     /**
@@ -35,7 +34,7 @@ class MaxLength implements ValidatorInterface
      */
     public function getError(): string
     {
-        return '@field must be at most @length character(s) long';
+        return '@field is required';
     }
 
     /**
@@ -44,7 +43,7 @@ class MaxLength implements ValidatorInterface
     public function getFormattedArgs(array $arguments): array
     {
         return [
-            'length' => reset($arguments),
+            'trim' => $arguments[0]
         ];
     }
 
@@ -53,6 +52,6 @@ class MaxLength implements ValidatorInterface
      */
     public function validate($value, array $arguments): bool
     {
-        return wstring::from($value)->length() <= $arguments['length'];
+        return !empty(trim((string)$value, $arguments['trim']));
     }
 }

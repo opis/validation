@@ -19,14 +19,14 @@ namespace Opis\Validation\Test;;
 
 use PHPUnit\Framework\TestCase;
 
-class ValidationTest extends TestCase
+class ValidationTestX extends TestCase
 {
-    /** @var   Validator */
+    /** @var   RequestValidator */
     protected $v;
 
     public function setUp()
     {
-        $this->v = new Validator();
+        $this->v = new RequestValidator();
     }
 
     public function testReturnValue()

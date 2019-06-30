@@ -15,23 +15,44 @@
  * limitations under the License.
  * ============================================================================ */
 
-namespace Opis\Validation\Test;
+namespace Opis\Validation\Validators\Field;
 
-use Opis\Validation\Validator as BaseValidator;
-use Opis\Validation\DefaultValidatorTrait;
+use Opis\String\UnicodeString as wstring;
+use Opis\Validation\IValidator;
 
-class Validator extends BaseValidator
+class MinLength implements IValidator
 {
-    use DefaultValidatorTrait;
-
     /**
-     * @param array $validator
-     * @return Validator
+     * @inheritdoc
      */
-    protected function push(array $validator): self
+    public function name(): string
     {
-        $this->stack[] = $validator;
-        return $this;
+        return 'field:min_length';
     }
 
+    /**
+     * @inheritdoc
+     */
+    public function getError(): string
+    {
+        return '@field must be at least @length character(s) long';
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getFormattedArgs(array $arguments): array
+    {
+        return [
+            'length' => reset($arguments),
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function validate($value, array $arguments): bool
+    {
+        return wstring::from($value)->length() >= $arguments['length'];
+    }
 }

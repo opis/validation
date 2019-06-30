@@ -15,43 +15,34 @@
  * limitations under the License.
  * ============================================================================ */
 
-namespace Opis\Validation\Validators;
+namespace Opis\Validation;
 
-use Opis\Validation\ValidatorInterface;
-
-class LessThanOrEqual implements ValidatorInterface
+interface IValidator
 {
     /**
-     * @inheritdoc
+     * Validator's name
+     *
+     * @return string
      */
-    public function name(): string
-    {
-        return 'lte';
-    }
+    public function name(): string;
 
     /**
-     * @inheritdoc
+     * @return string
      */
-    public function getError(): string
-    {
-        return '@field must be at most @number';
-    }
+    public function getError(): string;
 
     /**
-     * @inheritdoc
+     * @param array $arguments
+     * @return array
      */
-    public function getFormattedArgs(array $arguments): array
-    {
-        return [
-            'number' => reset($arguments),
-        ];
-    }
+    public function getFormattedArgs(array $arguments): array;
 
     /**
-     * @inheritdoc
+     * Validate
+     *
+     * @param mixed $value
+     * @param array $arguments
+     * @return bool
      */
-    public function validate($value, array $arguments): bool
-    {
-        return $value <= $arguments['number'];
-    }
+    public function validate($value, array $arguments): bool;
 }

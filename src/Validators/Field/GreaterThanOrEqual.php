@@ -15,38 +15,43 @@
  * limitations under the License.
  * ============================================================================ */
 
-namespace Opis\Validation;
+namespace Opis\Validation\Validators\Field;
 
-class ValidatorCollection
+use Opis\Validation\IValidator;
+
+class GreaterThanOrEqual implements IValidator
 {
-    /** @var ValidatorInterface[] */
-    protected $validators = [];
-
     /**
-     * ValidatorCollection constructor.
-     * @param ValidatorInterface[] $validators
+     * @inheritdoc
      */
-    public function __construct(array $validators = [])
+    public function name(): string
     {
-        foreach ($validators as $validator){
-            $this->validators[$validator->name()] = $validator;
-        }
+        return 'field:gte';
     }
 
     /**
-     * @param ValidatorInterface $validator
+     * @inheritdoc
      */
-    public function add(ValidatorInterface $validator)
+    public function getError(): string
     {
-        $this->validators[$validator->name()] = $validator;
+        return '@field must be at least @number';
     }
 
     /**
-     * @param string $name
-     * @return ValidatorInterface|null
+     * @inheritdoc
      */
-    public function get(string $name)
+    public function getFormattedArgs(array $arguments): array
     {
-        return $this->validators[$name] ?? null;
+        return [
+            'number' => reset($arguments),
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function validate($value, array $arguments): bool
+    {
+        return $value >= $arguments['number'];
     }
 }

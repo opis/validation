@@ -15,18 +15,18 @@
  * limitations under the License.
  * ============================================================================ */
 
-namespace Opis\Validation\Validators;
+namespace Opis\Validation\Validators\Field;
 
-use Opis\Validation\ValidatorInterface;
+use Opis\Validation\IValidator;
 
-class FileMatch implements ValidatorInterface
+class Email implements IValidator
 {
     /**
      * @inheritdoc
      */
     public function name(): string
     {
-        return 'fileMatch';
+        return 'field:email';
     }
 
     /**
@@ -34,7 +34,7 @@ class FileMatch implements ValidatorInterface
      */
     public function getError(): string
     {
-        return 'Invalid file type';
+        return '@field must be a valid email';
     }
 
     /**
@@ -42,9 +42,7 @@ class FileMatch implements ValidatorInterface
      */
     public function getFormattedArgs(array $arguments): array
     {
-        return [
-            'pattern' => reset($arguments),
-        ];
+        return [];
     }
 
     /**
@@ -52,10 +50,6 @@ class FileMatch implements ValidatorInterface
      */
     public function validate($value, array $arguments): bool
     {
-        if (!is_array($value) || !isset($value['name'])) {
-            return false;
-        }
-
-        return (bool) preg_match($arguments['pattern'], $value['name']);
+        return filter_var($value, FILTER_VALIDATE_EMAIL);
     }
 }

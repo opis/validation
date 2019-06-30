@@ -15,18 +15,18 @@
  * limitations under the License.
  * ============================================================================ */
 
-namespace Opis\Validation\Validators;
+namespace Opis\Validation\Validators\Field;
 
-use Opis\Validation\ValidatorInterface;
+use Opis\Validation\IValidator;
 
-class Regex implements ValidatorInterface
+class Number implements IValidator
 {
     /**
      * @inheritdoc
      */
     public function name(): string
     {
-        return 'regex';
+        return 'field:number';
     }
 
     /**
@@ -34,7 +34,7 @@ class Regex implements ValidatorInterface
      */
     public function getError(): string
     {
-        return '@field is not valid';
+        return '@field must be a number';
     }
 
     /**
@@ -42,9 +42,7 @@ class Regex implements ValidatorInterface
      */
     public function getFormattedArgs(array $arguments): array
     {
-        return [
-            'pattern' => reset($arguments),
-        ];
+        return [];
     }
 
     /**
@@ -52,6 +50,6 @@ class Regex implements ValidatorInterface
      */
     public function validate($value, array $arguments): bool
     {
-        return (bool) preg_match($arguments['pattern'], $value);
+        return is_numeric($value);
     }
 }

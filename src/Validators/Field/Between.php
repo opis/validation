@@ -15,18 +15,18 @@
  * limitations under the License.
  * ============================================================================ */
 
-namespace Opis\Validation\Validators;
+namespace Opis\Validation\Validators\Field;
 
-use Opis\Validation\ValidatorInterface;
+use Opis\Validation\IValidator;
 
-class GreaterThanOrEqual implements ValidatorInterface
+class Between implements IValidator
 {
     /**
      * @inheritdoc
      */
     public function name(): string
     {
-        return 'gte';
+        return 'field:between';
     }
 
     /**
@@ -34,7 +34,7 @@ class GreaterThanOrEqual implements ValidatorInterface
      */
     public function getError(): string
     {
-        return '@field must be at least @number';
+        return '@field must be between @min and @max';
     }
 
     /**
@@ -42,8 +42,10 @@ class GreaterThanOrEqual implements ValidatorInterface
      */
     public function getFormattedArgs(array $arguments): array
     {
+        list($min, $max) = $arguments;
         return [
-            'number' => reset($arguments),
+            'min' => $min,
+            'max' => $max,
         ];
     }
 
@@ -52,6 +54,6 @@ class GreaterThanOrEqual implements ValidatorInterface
      */
     public function validate($value, array $arguments): bool
     {
-        return $value >= $arguments['number'];
+        return $value >= $arguments['min'] && $value <= $arguments['max'];
     }
 }

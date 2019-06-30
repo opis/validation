@@ -15,18 +15,18 @@
  * limitations under the License.
  * ============================================================================ */
 
-namespace Opis\Validation\Validators;
+namespace Opis\Validation\Validators\Field;
 
-use Opis\Validation\ValidatorInterface;
+use Opis\Validation\IValidator;
 
-class Match implements ValidatorInterface
+class SameAs implements IValidator
 {
     /**
      * @inheritdoc
      */
     public function name(): string
     {
-        return 'match';
+        return 'field:same_as';
     }
 
     /**

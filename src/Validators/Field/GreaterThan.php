@@ -15,18 +15,18 @@
  * limitations under the License.
  * ============================================================================ */
 
-namespace Opis\Validation\Validators;
+namespace Opis\Validation\Validators\Field;
 
-use Opis\Validation\ValidatorInterface;
+use Opis\Validation\IValidator;
 
-class Email implements ValidatorInterface
+class GreaterThan implements IValidator
 {
     /**
      * @inheritdoc
      */
     public function name(): string
     {
-        return 'email';
+        return 'field:gt';
     }
 
     /**
@@ -34,7 +34,7 @@ class Email implements ValidatorInterface
      */
     public function getError(): string
     {
-        return '@field must be a valid email';
+        return '@field must be greater than @number';
     }
 
     /**
@@ -42,7 +42,9 @@ class Email implements ValidatorInterface
      */
     public function getFormattedArgs(array $arguments): array
     {
-        return [];
+        return [
+            'number' => reset($arguments),
+        ];
     }
 
     /**
@@ -50,6 +52,6 @@ class Email implements ValidatorInterface
      */
     public function validate($value, array $arguments): bool
     {
-        return filter_var($value, FILTER_VALIDATE_EMAIL);
+        return $value > $arguments['number'];
     }
 }

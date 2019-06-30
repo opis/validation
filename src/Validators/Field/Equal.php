@@ -15,18 +15,18 @@
  * limitations under the License.
  * ============================================================================ */
 
-namespace Opis\Validation\Validators;
+namespace Opis\Validation\Validators\Field;
 
-use Opis\Validation\ValidatorInterface;
+use Opis\Validation\IValidator;
 
-class RequiredFile implements ValidatorInterface
+class Equal implements IValidator
 {
     /**
      * @inheritdoc
      */
     public function name(): string
     {
-        return 'requiredFile';
+        return 'field:equal';
     }
 
     /**
@@ -34,7 +34,7 @@ class RequiredFile implements ValidatorInterface
      */
     public function getError(): string
     {
-        return '@field is required';
+        return '@field must be equal with @number';
     }
 
     /**
@@ -42,7 +42,9 @@ class RequiredFile implements ValidatorInterface
      */
     public function getFormattedArgs(array $arguments): array
     {
-        return [];
+        return [
+            'number' => reset($arguments),
+        ];
     }
 
     /**
@@ -50,10 +52,6 @@ class RequiredFile implements ValidatorInterface
      */
     public function validate($value, array $arguments): bool
     {
-        if (!is_array($value) || !array_key_exists('name', $value)) {
-            return false;
-        }
-
-        return !($value['name'] === null || trim($value['name']) === '');
+        return $value == $arguments['number'];
     }
 }

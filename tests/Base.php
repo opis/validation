@@ -1,6 +1,6 @@
 <?php
 /* ===========================================================================
- * Copyright 2018 Zindex Software
+ * Copyright 2019 Zindex Software
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,43 +15,28 @@
  * limitations under the License.
  * ============================================================================ */
 
-namespace Opis\Validation\Validators;
+namespace Opis\Validation\Test;
 
-use Opis\Validation\ValidatorInterface;
+use Opis\Http\Request;
+use Opis\Validation\RequestValidator;
+use PHPUnit\Framework\TestCase;
 
-class GreaterThan implements ValidatorInterface
+class Base extends TestCase
 {
-    /**
-     * @inheritdoc
-     */
-    public function name(): string
+    /** @var RequestValidator */
+    protected $v;
+
+    public function setUp()
     {
-        return 'gt';
+        $this->v = new RequestValidator();
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function getError(): string
+    protected function request(array $data = [], string $type = 'field'): Request
     {
-        return '@field must be greater than @number';
-    }
+        if ($type === 'file') {
+            return new Request('POST', '/', 'HTTP/1.1', false, [], $data);
+        }
 
-    /**
-     * @inheritdoc
-     */
-    public function getFormattedArgs(array $arguments): array
-    {
-        return [
-            'number' => reset($arguments),
-        ];
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function validate($value, array $arguments): bool
-    {
-        return $value > $arguments['number'];
+        return new Request('POST', '/', 'HTTP/1.1', false, [], [], null, [], [], $data);
     }
 }
