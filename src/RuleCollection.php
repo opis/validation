@@ -22,10 +22,10 @@ use Opis\Validation\Rules\{
     Email,
     Equal,
     GreaterThan,
-    GreaterThanOrEqual,
+    GreaterOrEqualThan,
     Length,
     LessThan,
-    LessThanOrEqual,
+    LessOrEqualThan,
     Match,
     MaxLength,
     MinLength,
@@ -91,9 +91,9 @@ class RuleCollection
             case 'field:lt':
                 return new LessThan();
             case 'field:gte':
-                return new GreaterThanOrEqual();
+                return new GreaterOrEqualThan();
             case 'field:lte':
-                return new LessThanOrEqual();
+                return new LessOrEqualThan();
             case 'field:equal':
                 return new Equal();
             case 'field:between':
