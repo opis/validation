@@ -17,64 +17,64 @@
 
 namespace Opis\Validation\Test\Rules;
 
-class SameAsTest extends Base
+class LessThanOrEqualTest extends Base
 {
     public function testFail()
     {
         $this->v
             ->field('foo')
-            ->required();
+            ->lte(10);
 
         $this->v
             ->field('bar')
-            ->required()
-            ->sameAs('foo');
+            ->lte(12);
+
+        $this->v
+            ->field('baz')
+            ->lte(5)->setError('Error');
+
+        $this->v
+            ->field('qux')
+            ->lte(5);
 
         $data = [
-            'foo' => 'FOO',
-            'bar' => 'BAR'
+            'foo' => 'bar',
+            'bar' => 14,
+            'baz' => "40",
+            'qux' => []
         ];
 
         $result = $this->v->validate($data);
         $this->assertTrue($result->hasErrors());
-        $this->assertEquals('bar must match foo', $result->getError('bar'));
-    }
-
-    public function testFailCustomMessage()
-    {
-        $this->v
-            ->field('foo')
-            ->required();
-
-        $this->v
-            ->field('bar')
-            ->required()
-            ->sameAs('foo')->setError('Fields must match');
-
-        $data = [
-            'foo' => 'FOO',
-            'bar' => 'BAR'
-        ];
-
-        $result = $this->v->validate($data);
-        $this->assertTrue($result->hasErrors());
-        $this->assertEquals('Fields must match', $result->getError('bar'));
+        $this->assertEquals('foo must be at most 10', $result->getError('foo'));
+        $this->assertEquals('bar must be at most 12', $result->getError('bar'));
+        $this->assertEquals('Error', $result->getError('baz'));
+        $this->assertEquals('qux must be at most 5', $result->getError('qux'));
     }
 
     public function testPass()
     {
         $this->v
             ->field('foo')
-            ->required();
+            ->lte(10);
 
         $this->v
             ->field('bar')
-            ->required()
-            ->sameAs('foo');
+            ->lte(12);
+
+        $this->v
+            ->field('baz')
+            ->lte(7);
+
+        $this->v
+            ->field('qux')
+            ->lte(5);
 
         $data = [
-            'foo' => 'FOO',
-            'bar' => 'FOO'
+            'foo' => 7,
+            'bar' => '10',
+            'baz' => 7,
+            'qux' => '5'
         ];
 
         $result = $this->v->validate($data);

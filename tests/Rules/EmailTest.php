@@ -17,64 +17,42 @@
 
 namespace Opis\Validation\Test\Rules;
 
-class SameAsTest extends Base
+class EmailTest extends Base
 {
     public function testFail()
     {
         $this->v
             ->field('foo')
-            ->required();
-
-        $this->v
-            ->field('bar')
-            ->required()
-            ->sameAs('foo');
+            ->email();
 
         $data = [
-            'foo' => 'FOO',
-            'bar' => 'BAR'
+            'foo' => 'bar'
         ];
 
         $result = $this->v->validate($data);
         $this->assertTrue($result->hasErrors());
-        $this->assertEquals('bar must match foo', $result->getError('bar'));
+        $this->assertEquals('foo must be a valid email', $result->getError('foo'));
     }
 
-    public function testFailCustomMessage()
+    public function testFailMissingField()
     {
         $this->v
             ->field('foo')
-            ->required();
+            ->email();
 
-        $this->v
-            ->field('bar')
-            ->required()
-            ->sameAs('foo')->setError('Fields must match');
-
-        $data = [
-            'foo' => 'FOO',
-            'bar' => 'BAR'
-        ];
-
-        $result = $this->v->validate($data);
+        $result = $this->v->validate();
         $this->assertTrue($result->hasErrors());
-        $this->assertEquals('Fields must match', $result->getError('bar'));
+        $this->assertEquals('foo must be a valid email', $result->getError('foo'));
     }
 
     public function testPass()
     {
         $this->v
             ->field('foo')
-            ->required();
-
-        $this->v
-            ->field('bar')
-            ->required()
-            ->sameAs('foo');
+            ->email();
 
         $data = [
-            'foo' => 'FOO',
-            'bar' => 'FOO'
+            'foo' => 'test@example.com'
         ];
 
         $result = $this->v->validate($data);

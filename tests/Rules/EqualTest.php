@@ -17,67 +17,63 @@
 
 namespace Opis\Validation\Test\Rules;
 
-class SameAsTest extends Base
+class EqualTest extends Base
 {
     public function testFail()
     {
         $this->v
             ->field('foo')
-            ->required();
+            ->equal(10);
 
         $this->v
             ->field('bar')
-            ->required()
-            ->sameAs('foo');
+            ->equal(12);
+
+        $this->v
+            ->field('baz')
+            ->equal(0)->setError('Error');
+
+        $this->v
+            ->field('qux')
+            ->equal(5);
 
         $data = [
-            'foo' => 'FOO',
-            'bar' => 'BAR'
+            'foo' => 'bar',
+            'bar' => 10,
+            'baz' => [],
+            'qux' => '6'
         ];
 
         $result = $this->v->validate($data);
         $this->assertTrue($result->hasErrors());
-        $this->assertEquals('bar must match foo', $result->getError('bar'));
-    }
-
-    public function testFailCustomMessage()
-    {
-        $this->v
-            ->field('foo')
-            ->required();
-
-        $this->v
-            ->field('bar')
-            ->required()
-            ->sameAs('foo')->setError('Fields must match');
-
-        $data = [
-            'foo' => 'FOO',
-            'bar' => 'BAR'
-        ];
-
-        $result = $this->v->validate($data);
-        $this->assertTrue($result->hasErrors());
-        $this->assertEquals('Fields must match', $result->getError('bar'));
+        $this->assertEquals('foo must be 10', $result->getError('foo'));
+        $this->assertEquals('bar must be 12', $result->getError('bar'));
+        $this->assertEquals('Error', $result->getError('baz'));
+        $this->assertEquals('qux must be 5', $result->getError('qux'));
     }
 
     public function testPass()
     {
         $this->v
             ->field('foo')
-            ->required();
+            ->equal(10);
 
         $this->v
             ->field('bar')
-            ->required()
-            ->sameAs('foo');
+            ->equal(12);
+
+        $this->v
+            ->field('baz')
+            ->equal('hello');
 
         $data = [
-            'foo' => 'FOO',
-            'bar' => 'FOO'
+            'foo' => 10,
+            'bar' => '12',
+            'baz' => 'hello',
         ];
 
         $result = $this->v->validate($data);
         $this->assertTrue($result->isValid());
     }
+
 }

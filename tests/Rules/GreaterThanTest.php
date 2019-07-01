@@ -17,64 +17,54 @@
 
 namespace Opis\Validation\Test\Rules;
 
-class SameAsTest extends Base
+class GreaterThanTest extends Base
 {
     public function testFail()
     {
         $this->v
             ->field('foo')
-            ->required();
+            ->gt(10);
 
         $this->v
             ->field('bar')
-            ->required()
-            ->sameAs('foo');
+            ->gt(12);
+
+        $this->v
+            ->field('baz')
+            ->gt(5)->setError('Error');
+
+        $this->v
+            ->field('qux')
+            ->gt(5);
 
         $data = [
-            'foo' => 'FOO',
-            'bar' => 'BAR'
+            'foo' => 'bar',
+            'bar' => 10,
+            'baz' => "4",
+            'qux' => []
         ];
 
         $result = $this->v->validate($data);
         $this->assertTrue($result->hasErrors());
-        $this->assertEquals('bar must match foo', $result->getError('bar'));
-    }
-
-    public function testFailCustomMessage()
-    {
-        $this->v
-            ->field('foo')
-            ->required();
-
-        $this->v
-            ->field('bar')
-            ->required()
-            ->sameAs('foo')->setError('Fields must match');
-
-        $data = [
-            'foo' => 'FOO',
-            'bar' => 'BAR'
-        ];
-
-        $result = $this->v->validate($data);
-        $this->assertTrue($result->hasErrors());
-        $this->assertEquals('Fields must match', $result->getError('bar'));
+        $this->assertEquals('foo must be greater than 10', $result->getError('foo'));
+        $this->assertEquals('bar must be greater than 12', $result->getError('bar'));
+        $this->assertEquals('Error', $result->getError('baz'));
+        $this->assertEquals('qux must be greater than 5', $result->getError('qux'));
     }
 
     public function testPass()
     {
         $this->v
             ->field('foo')
-            ->required();
+            ->gt(10);
 
         $this->v
             ->field('bar')
-            ->required()
-            ->sameAs('foo');
+            ->gt(12);
 
         $data = [
-            'foo' => 'FOO',
-            'bar' => 'FOO'
+            'foo' => 20,
+            'bar' => '25',
         ];
 
         $result = $this->v->validate($data);

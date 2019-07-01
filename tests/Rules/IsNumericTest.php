@@ -17,64 +17,52 @@
 
 namespace Opis\Validation\Test\Rules;
 
-class SameAsTest extends Base
+class IsNumericTest extends Base
 {
     public function testFail()
     {
         $this->v
             ->field('foo')
-            ->required();
+            ->isNumeric();
 
         $this->v
             ->field('bar')
-            ->required()
-            ->sameAs('foo');
+            ->isNumeric();
 
         $data = [
-            'foo' => 'FOO',
-            'bar' => 'BAR'
+            'foo' => 'bar',
+            'bar' => []
         ];
 
         $result = $this->v->validate($data);
         $this->assertTrue($result->hasErrors());
-        $this->assertEquals('bar must match foo', $result->getError('bar'));
-    }
-
-    public function testFailCustomMessage()
-    {
-        $this->v
-            ->field('foo')
-            ->required();
-
-        $this->v
-            ->field('bar')
-            ->required()
-            ->sameAs('foo')->setError('Fields must match');
-
-        $data = [
-            'foo' => 'FOO',
-            'bar' => 'BAR'
-        ];
-
-        $result = $this->v->validate($data);
-        $this->assertTrue($result->hasErrors());
-        $this->assertEquals('Fields must match', $result->getError('bar'));
+        $this->assertEquals('foo must be a number', $result->getError('foo'));
+        $this->assertEquals('bar must be a number', $result->getError('bar'));
     }
 
     public function testPass()
     {
         $this->v
             ->field('foo')
-            ->required();
+            ->isNumeric();
 
         $this->v
             ->field('bar')
-            ->required()
-            ->sameAs('foo');
+            ->isNumeric();
+
+        $this->v
+            ->field('baz')
+            ->isNumeric();
+
+        $this->v
+            ->field('qux')
+            ->isNumeric();
 
         $data = [
-            'foo' => 'FOO',
-            'bar' => 'FOO'
+            'foo' => '123',
+            'bar' => 1.23,
+            'baz' => '-34',
+            'qux' => -4.56e3
         ];
 
         $result = $this->v->validate($data);

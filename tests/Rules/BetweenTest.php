@@ -17,112 +17,95 @@
 
 namespace Opis\Validation\Test\Rules;
 
-class RequiredTest extends Base
+class BetweenTest extends Base
 {
-    public function testRequiredFail()
+    public function testFail()
     {
         $this->v
             ->field('foo')
-            ->required();
-
-        $result = $this->v->validate();
-        $this->assertTrue($result->hasErrors());
-        $this->assertEquals('foo is required', $result->getError('foo'));
-    }
-
-    public function testRequiredFailCustomMessage()
-    {
-        $this->v
-            ->field('foo')
-            ->required()->setError('Error foo');
-
-        $result = $this->v->validate();
-        $this->assertTrue($result->hasErrors());
-        $this->assertEquals('Error foo', $result->getError('foo'));
-    }
-
-    public function testRequiredFailNullValue()
-    {
-        $this->v
-            ->field('foo')
-            ->required();
+            ->between(5, 10);
 
         $data = [
-            'foo' => null,
+            'foo' => 11
         ];
 
         $result = $this->v->validate($data);
         $this->assertTrue($result->hasErrors());
+        $this->assertEquals('foo must be between 5 and 10', $result->getError('foo'));
     }
 
-    public function testRequiredFailCustomTrim()
+    public function testFailWrongDataType()
     {
         $this->v
             ->field('foo')
-            ->required('x');
+            ->between(5, 10);
 
         $data = [
-            'foo' => 'xxx',
+            'foo' => 'bar'
         ];
 
         $result = $this->v->validate($data);
         $this->assertTrue($result->hasErrors());
+        $this->assertEquals('foo must be between 5 and 10', $result->getError('foo'));
     }
 
-    public function testRequiredFailUseOriginalValue()
+    public function testFailMissingField()
     {
         $this->v
             ->field('foo')
-            ->required('x')->setError('%value');
-
-        $data = [
-            'foo' => 'xxx',
-        ];
-
-        $result = $this->v->validate($data);
-        $this->assertTrue($result->hasErrors());
-        $this->assertEquals('xxx', $result->getError('foo'));
-    }
-
-    public function testRequiredFailCustomName()
-    {
-        $this->v
-            ->field('foo', 'bar')
-            ->required();
-
+            ->between(5, 10);
 
         $result = $this->v->validate();
         $this->assertTrue($result->hasErrors());
-        $this->assertEquals('bar is required', $result->getError('foo'));
+        $this->assertEquals('foo must be between 5 and 10', $result->getError('foo'));
     }
 
-    public function testRequiredPass()
+    public function testFailCustomMessage()
     {
         $this->v
             ->field('foo')
-            ->required();
+            ->between(5, 10)->setError('Error');
 
         $data = [
-            'foo' => 'bar',
+            'foo' => 11
+        ];
+
+        $result = $this->v->validate($data);
+        $this->assertTrue($result->hasErrors());
+        $this->assertEquals('Error', $result->getError('foo'));
+    }
+
+    public function testPass()
+    {
+        $this->v
+            ->field('foo')
+            ->between(5, 10);
+
+        $data = [
+            'foo' => 7
         ];
 
         $result = $this->v->validate($data);
         $this->assertTrue($result->isValid());
-        $this->assertEquals('bar', $result->getValue('foo'));
     }
 
-    public function testRequiredPassCustomTrim()
+    public function testPassLowerAndHigher()
     {
         $this->v
             ->field('foo')
-            ->required('x');
+            ->between(5, 11);
+
+        $this->v
+            ->field('bar')
+            ->between(8, 12);
 
         $data = [
-            'foo' => 'xBARx',
+            'foo' => 5,
+            'bar' => 12
         ];
 
         $result = $this->v->validate($data);
         $this->assertTrue($result->isValid());
-        $this->assertEquals('BAR', $result->getValue('foo'));
     }
+
 }

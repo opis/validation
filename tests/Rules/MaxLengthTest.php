@@ -17,64 +17,65 @@
 
 namespace Opis\Validation\Test\Rules;
 
-class SameAsTest extends Base
+class MaxLengthTest extends Base
 {
     public function testFail()
     {
         $this->v
             ->field('foo')
-            ->required();
+            ->maxLength(2);
 
         $this->v
             ->field('bar')
-            ->required()
-            ->sameAs('foo');
+            ->maxLength(4);
+
+
+        $this->v
+            ->field('baz')
+            ->maxLength(3)->setError('Error');
+
+        $this->v
+            ->field('qux')
+            ->maxLength(1);
 
         $data = [
-            'foo' => 'FOO',
-            'bar' => 'BAR'
+            'foo' => 'bar',
+            'bar' => 'ăâîșț',
+            'baz' => 'hello',
+            'qux' => []
         ];
 
         $result = $this->v->validate($data);
         $this->assertTrue($result->hasErrors());
-        $this->assertEquals('bar must match foo', $result->getError('bar'));
-    }
-
-    public function testFailCustomMessage()
-    {
-        $this->v
-            ->field('foo')
-            ->required();
-
-        $this->v
-            ->field('bar')
-            ->required()
-            ->sameAs('foo')->setError('Fields must match');
-
-        $data = [
-            'foo' => 'FOO',
-            'bar' => 'BAR'
-        ];
-
-        $result = $this->v->validate($data);
-        $this->assertTrue($result->hasErrors());
-        $this->assertEquals('Fields must match', $result->getError('bar'));
+        $this->assertEquals('foo must be at most 2 character(s) long', $result->getError('foo'));
+        $this->assertEquals('bar must be at most 4 character(s) long', $result->getError('bar'));
+        $this->assertEquals('Error', $result->getError('baz'));
+        $this->assertEquals('qux must be at most 1 character(s) long', $result->getError('qux'));
     }
 
     public function testPass()
     {
         $this->v
             ->field('foo')
-            ->required();
+            ->maxLength(4);
 
         $this->v
             ->field('bar')
-            ->required()
-            ->sameAs('foo');
+            ->maxLength(6);
+
+        $this->v
+            ->field('baz')
+            ->maxLength(1);
+
+        $this->v
+            ->field('qux')
+            ->maxLength(3);
 
         $data = [
-            'foo' => 'FOO',
-            'bar' => 'FOO'
+            'foo' => 'bar',
+            'bar' => 'ăâîșț',
+            'baz' => true,
+            'qux' => 123,
         ];
 
         $result = $this->v->validate($data);
