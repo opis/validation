@@ -17,7 +17,6 @@
 
 namespace Opis\Validation\Types;
 
-use Opis\Http\Request;
 use Opis\Validation\Validator;
 use Opis\Validation\Result;
 use RuntimeException;
@@ -67,8 +66,15 @@ abstract class Common
      */
     public function __call($name, $arguments)
     {
+        $words = [];
+        preg_match_all('~([A-Z][A-Z0-9]*(?=$|[A-Z][a-z0-9])|[A-Za-z][a-z0-9]+)~', $name, $matches);
+
+        foreach ($matches[0] as $match) {
+            $words[] = strtolower($match);
+        }
+
         $this->stack[] = [
-            'name' => $name,
+            'name' => $this->type . ':' . implode('_', $words),
             'arguments' => $arguments,
             'error' => null,
         ];
