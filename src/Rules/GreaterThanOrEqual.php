@@ -19,7 +19,7 @@ namespace Opis\Validation\Rules;
 
 use Opis\Validation\IValidationRule;
 
-class GreaterOrEqualThan implements IValidationRule
+class GreaterThanOrEqual implements IValidationRule
 {
     /**
      * @inheritdoc
